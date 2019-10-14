@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
-	github.com/jarmo/secrets/v5 v5.0.0
+	github.com/jarmo/secrets v0.0.0-20191014090833-f3bfba0dd72c
 	github.com/pinzolo/xdgdir v0.0.0-20181207033906-45fed2c52080 // indirect
 	github.com/satori/go.uuid v1.2.0
 	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550

@@ -3,7 +3,7 @@ package command
 import (
   "fmt"
   "os"
-  "github.com/jarmo/secrets/v5/vault"
+  "github.com/jarmo/secrets/vault"
   "github.com/jarmo/secrets-cli/v5/cli/vaultfile"
   "github.com/jarmo/secrets-cli/v5/input"
 )

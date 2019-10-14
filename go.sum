@@ -1,7 +1,7 @@
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815 h1:bWDMxwH3px2JBh6AyO7hdCn/PkvCZXii8TGj7sbtEbQ=
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
-github.com/jarmo/secrets v0.0.0-20191014135407-83e4bfd646b2 h1:0cj+IgEXw+oo3LuJfr4YamjJGNKocIJGDfCL1hzvOI4=
-github.com/jarmo/secrets v0.0.0-20191014135407-83e4bfd646b2/go.mod h1:TLpxb3LDzOkb24kggMVFIPoNoIP2CX7mIKsc+wfiNXc=
+github.com/jarmo/secrets v0.0.0-20191014170141-abfed23becc9 h1:dMdh5SEG5OlPNCtr1BtoLZ3oZjReCGzIno/X1hhH6fs=
+github.com/jarmo/secrets v0.0.0-20191014170141-abfed23becc9/go.mod h1:TLpxb3LDzOkb24kggMVFIPoNoIP2CX7mIKsc+wfiNXc=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=

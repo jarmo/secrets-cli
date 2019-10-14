@@ -1,13 +1,13 @@
-module github.com/jarmo/secrets/v5
+module github.com/jarmo/secrets-cli/v5
 
 go 1.12
 
 require (
-	github.com/docopt/docopt-go v0.0.0-20160216232012-784ddc588536
-	github.com/kr/pretty v0.1.0 // indirect
-	github.com/pinzolo/xdgdir v0.0.0-20180220135956-c5b4bdb0a9c4
+	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
+	github.com/jarmo/secrets/v5 v5.0.0
+	github.com/pinzolo/xdgdir v0.0.0-20181207033906-45fed2c52080 // indirect
 	github.com/satori/go.uuid v1.2.0
-	golang.org/x/crypto v0.0.0-20181112202954-3d3f9f413869
-	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 // indirect
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
+	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
+	golang.org/x/sys v0.0.0-20191010194322-b09406accb47 // indirect
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )

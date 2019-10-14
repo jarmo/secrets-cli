@@ -2,8 +2,6 @@ github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815 h1:bWDMxwH3px2JBh
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
 github.com/jarmo/secrets v0.0.0-20191014090833-f3bfba0dd72c h1:7RXSoBghBER6stnAYfWZDvcPdM1/2mvBycmFKod0lvw=
 github.com/jarmo/secrets v0.0.0-20191014090833-f3bfba0dd72c/go.mod h1:KnHRLNziCVRvbhPffM194ESSdg+q4K2JB60ouGFPwj0=
-github.com/jarmo/secrets v0.0.0-20191014133622-6acb73421aca h1:Xtzp25OR1TfLhJpIm+dJ6nkU7GgQn1lpeKkKHEus1DM=
-github.com/jarmo/secrets v0.0.0-20191014133622-6acb73421aca/go.mod h1:KnHRLNziCVRvbhPffM194ESSdg+q4K2JB60ouGFPwj0=
 github.com/jarmo/secrets-cli v4.0.0+incompatible h1:0uylulFuiFl35IXZ8XD0ymxSHWPRxoGbfgjNVMmH/E0=
 github.com/jarmo/secrets-cli v4.0.0+incompatible/go.mod h1:f7aS3+Bep+MujrOZsgoJTZvu75EK9y5MnK+T7vyHcvA=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=

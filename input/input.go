@@ -5,8 +5,7 @@ import (
   "fmt"
   "strings"
   "bufio"
-  "syscall"
-  "golang.org/x/crypto/ssh/terminal"
+  "github.com/jarmo/secrets/input"
 )
 
 func Ask(message string) string {
@@ -27,19 +26,8 @@ func AskMultiline(message string) string {
   return replaceUnprintableCharacters(strings.Join(value, "\n"))
 }
 
-func AskPassword(message string) []byte {
-  fmt.Print(message)
-  password, err := terminal.ReadPassword(int(syscall.Stdin))
-  if err != nil {
-    panic(err)
-  }
-  fmt.Println()
-
-  return password
-}
-
 func AskVaultPassword() []byte {
-  return AskPassword("Enter vault password: ")
+  return input.AskPassword("Enter vault password: ")
 }
 
 func replaceUnprintableCharacters(s string) string {

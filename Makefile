@@ -10,6 +10,7 @@ clean:
 
 vendor:
 	go mod vendor
+	go mod tidy
 
 linux: vendor
 	GOOS=linux ${GO_BUILD} -o bin/linux_${GOARCH}/${BINARY}

@@ -6,7 +6,7 @@ import (
   "github.com/satori/go.uuid"
   "github.com/jarmo/secrets/storage"
   "github.com/jarmo/secrets/vault"
-  "github.com/jarmo/secrets-cli/v5/cli/vaultfile"
+  "github.com/jarmo/secrets-cli/v6/cli/vaultfile"
 )
 
 type Delete struct {

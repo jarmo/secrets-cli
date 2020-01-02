@@ -5,8 +5,8 @@ import (
   "os"
   "github.com/jarmo/secrets/storage"
   "github.com/jarmo/secrets/secret"
-  "github.com/jarmo/secrets-cli/v5/storage/path"
-  "github.com/jarmo/secrets-cli/v5/input"
+  "github.com/jarmo/secrets-cli/v6/storage/path"
+  "github.com/jarmo/secrets-cli/v6/input"
 )
 
 func Read(vaultPath string) ([]secret.Secret, string, []byte) {

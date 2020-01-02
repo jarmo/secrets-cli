@@ -3,7 +3,7 @@ package cli
 import (
   "testing"
   "github.com/satori/go.uuid"
-  "github.com/jarmo/secrets-cli/v5/cli/command"
+  "github.com/jarmo/secrets-cli/v6/cli/command"
 )
 
 const version = "1.3.3.7"

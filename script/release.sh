@@ -9,8 +9,7 @@ git push
 
 VERSION=v`grep "VERSION =" secrets.go | awk '{print $4}' | tr -d '"'`
 read -rp "Enter changelog to release version $VERSION: " CHANGELOG
-read -sp "Enter GitHub password: " PASSWORD
-RESPONSE=`http -ba jarmo:$PASSWORD POST "https://api.github.com/repos/jarmo/secrets-cli/releases" tag_name="$VERSION" draft:=true name="secrets-cli $VERSION" body="$CHANGELOG"`
+RESPONSE=`http -b "https://api.github.com/repos/jarmo/secrets-cli/releases" Authorization:"token $GITHUB_RELEASE_TOKEN" tag_name="$VERSION" draft:=true name="secrets-cli $VERSION" body="$CHANGELOG"`
 
 rm -rf dist
 mkdir -p dist
@@ -24,10 +23,10 @@ done
 
 RELEASE_ID=`echo $RESPONSE | jq -r .id`
 for file in `ls -d dist/*`; do
-  http -ba jarmo:$PASSWORD POST "https://uploads.github.com/repos/jarmo/secrets-cli/releases/$RELEASE_ID/assets?name=`basename $file`" @$file > /dev/null
+  http -b POST "https://uploads.github.com/repos/jarmo/secrets-cli/releases/$RELEASE_ID/assets?name=`basename $file`" Authorization:"token $GITHUB_RELEASE_TOKEN" @$file > /dev/null
 done
 
-RESPONSE=`http -ba jarmo:$PASSWORD PATCH "https://api.github.com/repos/jarmo/secrets-cli/releases/$RELEASE_ID" draft:=false`
+RESPONSE=`http -b PATCH "https://api.github.com/repos/jarmo/secrets-cli/releases/$RELEASE_ID" Authorization:"token $GITHUB_RELEASE_TOKEN" draft:=false`
 
 echo "Release done:"
 echo $RESPONSE | jq -r .html_url

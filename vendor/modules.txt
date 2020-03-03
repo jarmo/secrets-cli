@@ -1,6 +1,6 @@
 # github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
 github.com/docopt/docopt-go
-# github.com/jarmo/secrets v0.0.0-20200102120744-d736e32b886f
+# github.com/jarmo/secrets v0.0.0-20200303043228-ac68c21e4300
 github.com/jarmo/secrets/storage
 github.com/jarmo/secrets/vault
 github.com/jarmo/secrets/secret
@@ -10,6 +10,8 @@ github.com/jarmo/secrets/vault/add
 github.com/jarmo/secrets/vault/delete
 github.com/jarmo/secrets/vault/edit
 github.com/jarmo/secrets/vault/list
+# github.com/juju/fslock v0.0.0-20160525022230-4d5c94c67b4b
+github.com/juju/fslock
 # github.com/pinzolo/xdgdir v0.0.0-20181207033906-45fed2c52080
 github.com/pinzolo/xdgdir
 # github.com/satori/go.uuid v1.2.0

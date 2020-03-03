@@ -1,11 +1,11 @@
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815 h1:bWDMxwH3px2JBh6AyO7hdCn/PkvCZXii8TGj7sbtEbQ=
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
-github.com/jarmo/secrets v0.0.0-20200102120744-d736e32b886f h1:lM4yPXV74ZdmnMN5PVbIuSGYkBvfqPhOfKtXFKDJlLs=
-github.com/jarmo/secrets v0.0.0-20200102120744-d736e32b886f/go.mod h1:TLpxb3LDzOkb24kggMVFIPoNoIP2CX7mIKsc+wfiNXc=
+github.com/jarmo/secrets v0.0.0-20200303043228-ac68c21e4300 h1:Hb+qgjNZvRgaYrPb59MQtoz265LQRhkXupEAF8MF6s8=
+github.com/jarmo/secrets v0.0.0-20200303043228-ac68c21e4300/go.mod h1:6/PKcpQgUJio+mw+Pz7YGS74GuSJrNo0MQUZDxIwl/U=
+github.com/juju/fslock v0.0.0-20160525022230-4d5c94c67b4b h1:FQ7+9fxhyp82ks9vAuyPzG0/vVbWwMwLJ+P6yJI5FN8=
+github.com/juju/fslock v0.0.0-20160525022230-4d5c94c67b4b/go.mod h1:HMcgvsgd0Fjj4XXDkbjdmlbI505rUPBs6WBMYg2pXks=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
-github.com/kr/pretty v0.2.0 h1:s5hAObm+yFO5uHYt5dYjxi2rXrsnmRpJx4OYvIWUaQs=
-github.com/kr/pretty v0.2.0/go.mod h1:ipq/a2n7PKx3OHsz4KJII5eveXtPO4qwEXGdVfWzfnI=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=

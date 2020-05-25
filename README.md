@@ -21,8 +21,8 @@ Usage:
   secrets list [FILTER] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets add NAME [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets edit ID [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets delete ID [--alias=VAULT_PATH | --path=VAULT_PATH]
-  secrets change-password [--alias=VAULT_PATH | --path=VAULT_PATH]
+  secrets delete ID [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets change-password [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS
 
 Options:

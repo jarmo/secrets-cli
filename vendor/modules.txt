@@ -1,6 +1,6 @@
 # github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
 github.com/docopt/docopt-go
-# github.com/jarmo/secrets v0.0.0-20200303043228-ac68c21e4300
+# github.com/jarmo/secrets v0.0.0-20211009175914-e0f3102462cf
 github.com/jarmo/secrets/storage
 github.com/jarmo/secrets/vault
 github.com/jarmo/secrets/secret

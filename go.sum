@@ -1,7 +1,5 @@
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815 h1:bWDMxwH3px2JBh6AyO7hdCn/PkvCZXii8TGj7sbtEbQ=
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
-github.com/jarmo/secrets v0.0.0-20200303043228-ac68c21e4300 h1:Hb+qgjNZvRgaYrPb59MQtoz265LQRhkXupEAF8MF6s8=
-github.com/jarmo/secrets v0.0.0-20200303043228-ac68c21e4300/go.mod h1:6/PKcpQgUJio+mw+Pz7YGS74GuSJrNo0MQUZDxIwl/U=
 github.com/jarmo/secrets v0.0.0-20211009175914-e0f3102462cf h1:u4Q+sBP3MWN817B9eGEZteqVSOwcwGg9rsHUH2dSoqE=
 github.com/jarmo/secrets v0.0.0-20211009175914-e0f3102462cf/go.mod h1:6/PKcpQgUJio+mw+Pz7YGS74GuSJrNo0MQUZDxIwl/U=
 github.com/juju/fslock v0.0.0-20160525022230-4d5c94c67b4b h1:FQ7+9fxhyp82ks9vAuyPzG0/vVbWwMwLJ+P6yJI5FN8=

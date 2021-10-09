@@ -21,13 +21,13 @@ Usage:
   secrets list [FILTER] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets add NAME [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets edit ID [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets delete ID [--alias=VAULT_PATH | --path=VAULT_PATH]
-  secrets change-password [--alias=VAULT_PATH | --path=VAULT_PATH]
+  secrets delete ID [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets change-password [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS
 
 Options:
-  --alias VAULT_ALIAS    Optional vault alias.
-  --path VAULT_PATH      Optional vault path. Defaults to the path in configuration.
+  --alias VAULT_ALIAS    Vault alias.
+  --path VAULT_PATH      Vault path.
   -h --help              Show this screen.
   -v --version           Show version.
 ```

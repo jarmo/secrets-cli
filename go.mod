@@ -8,6 +8,6 @@ require (
 	github.com/pinzolo/xdgdir v0.0.0-20181207033906-45fed2c52080
 	github.com/satori/go.uuid v1.2.0
 	golang.org/x/crypto v0.0.0-20191227163750-53104e6ec876
-	golang.org/x/sys v0.0.0-20191228213918-04cbcbbfeed8 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )

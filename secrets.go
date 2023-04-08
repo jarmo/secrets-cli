@@ -5,7 +5,7 @@ import (
   "github.com/jarmo/secrets-cli/v6/cli"
 )
 
-const VERSION = "6.1.1"
+const VERSION = "6.1.2"
 
 func main() {
   cli.Command(VERSION, os.Args[1:]).Execute()

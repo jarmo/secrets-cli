@@ -34,11 +34,13 @@ Options:
 
 ### Initializing Vault
 
-Vault needs to be initialized if there is going to be a default vault. Otherwise specifying `--path` or `--alias` with any command is supported. Initializing vault just stores location and alias to your vault into a configuration file (supporting [XDG Base Directory standard](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)):
+Create a vault and save its location and alias to a configuration file (supporting [XDG Base Directory standard](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)):
 
 ```
 $ secrets initialize --path /home/user/.secrets.json --alias main
-Vault successfully configured at /home/user/.config/secrets/config.json and is ready to store your secrets!
+Enter new vault password: [enter secure passphrase]
+Enter new vault password again: [repeat secure passphrase]
+Vault successfully created and configured at /home/user/.config/secrets/config.json!
 ```
 
 ### Adding a New Secret
@@ -47,7 +49,7 @@ Add your first secret:
 
 ```
 $ secrets add "my secret"
-Enter vault password: [enter secure passphrase and remember it]
+Enter vault password: [your vault password]
 Enter value for 'my secret':
 my secret value
 Added: 
@@ -117,6 +119,10 @@ When `--alias` is not specified a first vault existing in configuration file wil
 
 One way to sync would be to use any already existing syncing platforms like Dropbox, Microsoft OneDrive or Google Drive.
 Since you can specify vault storage location then it is up to you how (or if even) you sync.
+
+## Legacy vaults
+
+Starting with version 7.x, vaults use a new format that supports sharing between users. Legacy vaults are automatically converted to the new format when written. Support for the legacy format will be removed in the next major version.
 
 ## Development
 

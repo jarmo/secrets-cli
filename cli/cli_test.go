@@ -406,3 +406,16 @@ func TestExecute_MemberAdd(t *testing.T) {
     t.Fatalf("Unexpected member-add vault path: %#v", parsedCommand)
   }
 }
+
+func TestExecute_MemberListAndRemove(t *testing.T) {
+  list := Command(version, []string{"member-list", "--alias", "production", "--members-dir", "/tmp/members"})
+  listed, ok := list.(command.MemberList)
+  if !ok || listed.VaultAlias != "production" || listed.MembersDirectory != "/tmp/members" {
+    t.Fatalf("Unexpected member-list command: %+v", list)
+  }
+  remove := Command(version, []string{"member-remove", "bob", "--path", "/tmp/vault", "--members-dir", "/tmp/members"})
+  removed, ok := remove.(command.MemberRemove)
+  if !ok || removed.Username != "bob" || removed.VaultPath != "/tmp/vault" || removed.MembersDirectory != "/tmp/members" {
+    t.Fatalf("Unexpected member-remove command: %+v", remove)
+  }
+}

@@ -145,6 +145,20 @@ Member bob added to vault!
 
 `member-add` also accepts `--path` and `--members-dir`.
 
+List members or revoke a member's access to a vault:
+
+```
+$ secrets member-list --alias production
+owner (vault password)
+bob
+
+$ secrets member-remove bob --alias production
+Enter vault password: [vault password]
+Member bob removed from vault!
+```
+
+Removing a member rotates the vault encryption key while retaining access for other members. Both commands accept `--path` and `--members-dir`. The member's account is not deleted; it can be added to a vault again. Old backups can still be opened with keys that were valid at the time.
+
 ## Using multiple vaults
 
 Just append `--alias` after any command to operate against selected vault.

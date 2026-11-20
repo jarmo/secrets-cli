@@ -24,6 +24,8 @@ Usage:
   secrets member-create MEMBER [--members-dir=MEMBERS_DIR]
   secrets member-activate MEMBER [--members-dir=MEMBERS_DIR]
   secrets member-add MEMBER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR]
+  secrets member-list [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR]
+  secrets member-remove MEMBER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR]
 
 Options:
   --alias VAULT_ALIAS    Optional vault alias.
@@ -62,6 +64,12 @@ func createCommand(arguments map[string]interface {}) command.Executable {
   } else if arguments["member-add"].(bool) {
     directory, _ := arguments["--members-dir"].(string)
     return command.MemberAdd{Username: arguments["MEMBER"].(string), VaultAlias: vaultAlias, VaultPath: vaultPath, MembersDirectory: directory}
+  } else if arguments["member-list"].(bool) {
+    directory, _ := arguments["--members-dir"].(string)
+    return command.MemberList{VaultAlias: vaultAlias, VaultPath: vaultPath, MembersDirectory: directory}
+  } else if arguments["member-remove"].(bool) {
+    directory, _ := arguments["--members-dir"].(string)
+    return command.MemberRemove{Username: arguments["MEMBER"].(string), VaultAlias: vaultAlias, VaultPath: vaultPath, MembersDirectory: directory}
   } else if arguments["initialize"].(bool) {
     return command.Initialize{VaultAlias: vaultAlias, VaultPath: vaultPath}
   } else {

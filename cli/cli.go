@@ -20,7 +20,7 @@ Usage:
   secrets edit ID [--member=USERNAME] [--members-dir=MEMBERS_DIR] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets delete ID [--member=USERNAME] [--members-dir=MEMBERS_DIR] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets change-password [--alias=VAULT_PATH | --path=VAULT_PATH]
-  secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS
+  secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS --member=USERNAME [--members-dir=MEMBERS_DIR]
   secrets member-create MEMBER [--members-dir=MEMBERS_DIR]
   secrets member-activate MEMBER [--members-dir=MEMBERS_DIR]
   secrets member-add MEMBER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR] [--member=USERNAME]
@@ -74,7 +74,7 @@ func createCommand(arguments map[string]interface {}) command.Executable {
     directory, _ := arguments["--members-dir"].(string)
     return command.MemberRemove{Username: arguments["MEMBER"].(string), VaultAlias: vaultAlias, VaultPath: vaultPath, MembersDirectory: directory, Member: authenticatedMember}
   } else if arguments["initialize"].(bool) {
-    return command.Initialize{VaultAlias: vaultAlias, VaultPath: vaultPath}
+    return command.Initialize{VaultAlias: vaultAlias, VaultPath: vaultPath, Member: authenticatedMember, MembersDirectory: membersDirectory}
   } else {
     return nil
   }

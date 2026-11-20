@@ -45,7 +45,7 @@ func addMember(vaultPath, directory, username string, password []byte) error {
 	if err != nil {
 		return err
 	}
-	return storage.AssociateMember(vaultPath, password, memberRecord.Identity)
+	return storage.AssociateMemberRetiringPasswords(vaultPath, directory, password, memberRecord.Identity)
 }
 
 func addMemberForMember(vaultPath, directory, username string, privateKey *ecdh.PrivateKey) error {
@@ -53,5 +53,5 @@ func addMemberForMember(vaultPath, directory, username string, privateKey *ecdh.
 	if err != nil {
 		return err
 	}
-	return storage.AssociateMemberForMember(vaultPath, privateKey, memberRecord.Identity)
+	return storage.AssociateMemberForMemberRetiringPasswords(vaultPath, directory, privateKey, memberRecord.Identity)
 }

@@ -42,9 +42,12 @@ func TestAddMember(t *testing.T) {
 	if err := storage.WriteForMember(vaultPath, privateKey, []secret.Secret{secret.New("api", "token")}); err != nil {
 		t.Fatal(err)
 	}
-	entries, err := storage.Read(vaultPath, []byte("vault-password"))
+	if _, err := storage.Read(vaultPath, []byte("vault-password")); err == nil {
+		t.Fatal("Original vault password still unlocks the vault")
+	}
+	entries, err := storage.ReadForMember(vaultPath, privateKey)
 	if err != nil || len(entries) != 1 || entries[0].Value != "token" {
-		t.Fatalf("Existing password access broken: %v, %v", entries, err)
+		t.Fatalf("Member access broken: %v, %v", entries, err)
 	}
 	before, err := os.ReadFile(vaultPath)
 	if err != nil {
@@ -53,7 +56,7 @@ func TestAddMember(t *testing.T) {
 	if bytes.Contains(before, []byte("bob")) {
 		t.Fatal("Vault file exposes member username")
 	}
-	if err := addMember(vaultPath, directory, "bob", []byte("vault-password")); err == nil {
+	if err := addMemberForMember(vaultPath, directory, "bob", privateKey); err == nil {
 		t.Fatal("Duplicate member association succeeded")
 	}
 	after, err := os.ReadFile(vaultPath)
@@ -94,5 +97,8 @@ func TestAddMemberMigratesLegacyVault(t *testing.T) {
 	entries, err := storage.ReadForMember(vaultPath, privateKey)
 	if err != nil || len(entries) != 1 || entries[0] != contents[0] {
 		t.Fatalf("Legacy vault contents lost: %v, %v", entries, err)
+	}
+	if _, err := storage.Read(vaultPath, []byte("legacy-password")); err == nil {
+		t.Fatal("Legacy password still opens converted vault")
 	}
 }

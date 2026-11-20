@@ -18,31 +18,34 @@ Here's an output from `secrets --help` command.
 $ secrets COMMAND [OPTIONS]
 
 Usage:
-  secrets list [FILTER] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets add NAME [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets edit ID [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets delete ID [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets list [FILTER] [--member=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets add NAME [--member=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets edit ID [--member=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets delete ID [--member=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets change-password [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS
+  secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS --member=USERNAME [--members-dir=MEMBERS_DIR]
   secrets member-create MEMBER [--members-dir=MEMBERS_DIR]
   secrets member-activate MEMBER [--members-dir=MEMBERS_DIR]
+  secrets member-add MEMBER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR] [--member=USERNAME]
+  secrets member-list [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR] [--member=USERNAME]
+  secrets member-remove MEMBER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR] [--member=USERNAME]
 
 Options:
   --alias VAULT_ALIAS    Vault alias.
   --path VAULT_PATH      Vault path.
   --members-dir MEMBERS_DIR    Member storage directory.
+  --member USERNAME    Authenticate using this member account.
   -h --help              Show this screen.
   -v --version           Show version.
 ```
 
 ### Initializing Vault
 
-Create a vault and save its location and alias to a configuration file (supporting [XDG Base Directory standard](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)):
+After creating and activating a member account (see **Member setup** below), create a vault and save its location and alias to a configuration file (supporting [XDG Base Directory standard](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)):
 
 ```
-$ secrets initialize --path /home/user/.secrets.json --alias main
-Enter new vault password: [enter secure passphrase]
-Enter new vault password again: [repeat secure passphrase]
+$ secrets initialize --path /home/user/.secrets.json --alias main --member alice
+Enter member password: [Alice's password]
 Vault successfully created and configured at /home/user/.config/secrets/config.json!
 ```
 
@@ -51,8 +54,8 @@ Vault successfully created and configured at /home/user/.config/secrets/config.j
 Add your first secret:
 
 ```
-$ secrets add "my secret"
-Enter vault password: [your vault password]
+$ secrets add "my secret" --member alice
+Enter member password: [Alice's password]
 Enter value for 'my secret':
 my secret value
 Added: 
@@ -66,8 +69,8 @@ Because values can have multiple lines, you can enter whatever you want. Use ctr
 ### Listing All Secrets
 
 ```
-$ secrets list
-Enter vault password: [your secure passphrase]
+$ secrets list --member alice
+Enter member password: [Alice's password]
 
 [299ed462-b171-4d67-ba21-264b221d9913]
 my secret
@@ -77,8 +80,8 @@ my secret value
 ### Listing Specific Secrets
 
 ```
-$ secrets list "secret"
-Enter vault password: [your secure passphrase]
+$ secrets list "secret" --member alice
+Enter member password: [Alice's password]
 
 [299ed462-b171-4d67-ba21-264b221d9913]
 my secret
@@ -88,8 +91,8 @@ my secret value
 ### Editing a Secret
 
 ```
-$ secrets edit 299ed462-b171-4d67-ba21-264b221d9913
-Enter vault password: [your secure passphrase]
+$ secrets edit 299ed462-b171-4d67-ba21-264b221d9913 --member alice
+Enter member password: [Alice's password]
 Enter new name: different secret name
 Enter new value:
 different secret value
@@ -104,8 +107,8 @@ yet another secret value line
 ### Deleting a Secret
 
 ```
-$ secrets delete 299ed462-b171-4d67-ba21-264b221d9913
-Enter vault password: 
+$ secrets delete 299ed462-b171-4d67-ba21-264b221d9913 --member alice
+Enter member password: 
 Deleted: 
 [299ed462-b171-4d67-ba21-264b221d9913]
 different secret name
@@ -138,8 +141,8 @@ Setup codes expire after 48 hours. Both commands accept `--members-dir` to use t
 Once activated, a member can be granted access to a vault:
 
 ```
-$ secrets member-add bob --alias production
-Enter vault password: [vault password]
+$ secrets member-add bob --alias production --member alice
+Enter member password: [Alice's password]
 Member bob added to vault!
 ```
 
@@ -152,17 +155,17 @@ $ secrets list --alias production --member bob
 Enter member password: [Bob's password]
 ```
 
-The same option works with `add`, `edit`, `delete`, `member-add`, `member-list` and `member-remove`. It also accepts `--members-dir` if the accounts are stored outside the default directory. Without `--member`, the CLI continues to ask for the original vault password.
+The same option works with `add`, `edit`, `delete`, `member-add`, `member-list` and `member-remove`. Use `--members-dir` if the accounts are stored outside the default directory.
 
 List members or revoke a member's access to a vault:
 
 ```
-$ secrets member-list --alias production
-owner (vault password)
+$ secrets member-list --alias production --member alice
+alice
 bob
 
-$ secrets member-remove bob --alias production
-Enter vault password: [vault password]
+$ secrets member-remove bob --alias production --member alice
+Enter member password: [Alice's password]
 Member bob removed from vault!
 ```
 
@@ -181,6 +184,8 @@ Since you can specify vault storage location then it is up to you how (or if eve
 ## Legacy vaults
 
 Starting with version 7.x, vaults use a new format that supports sharing between users. Legacy vaults are automatically converted to the new format when written. Support for the legacy format will be removed in the next major version.
+
+To share a legacy vault, run `secrets member-add alice --alias production` and enter the original vault password. This grants Alice access and retires the vault password. For vaults already shared with members, running `member-add` for an existing member also retires any remaining vault-password access.
 
 ## Development
 

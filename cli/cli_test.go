@@ -353,13 +353,16 @@ func TestExecute_Initialize(t *testing.T) {
   vaultPath := "/foo/bar/baz"
   vaultAlias := "foo-bar"
 
-  switch parsedCommand := Command(version, []string{"initialize", "--path", vaultPath, "--alias", vaultAlias}).(type) {
+  switch parsedCommand := Command(version, []string{"initialize", "--path", vaultPath, "--alias", vaultAlias, "--member", "alice", "--members-dir", "/tmp/members"}).(type) {
     case command.Initialize:
       if parsedCommand.VaultPath != vaultPath {
         t.Fatalf("Expected vault path to be '%v', but was '%v'", vaultPath, parsedCommand.VaultPath)
       }
       if parsedCommand.VaultAlias != vaultAlias {
         t.Fatalf("Expected VaultAlias to be '%v' but was: '%v'", vaultAlias, parsedCommand.VaultAlias)
+      }
+      if parsedCommand.Member != "alice" || parsedCommand.MembersDirectory != "/tmp/members" {
+        t.Fatalf("Expected member authentication during initialization: %+v", parsedCommand)
       }
     default:
       t.Fatalf("Got unexpected command: %T", parsedCommand)

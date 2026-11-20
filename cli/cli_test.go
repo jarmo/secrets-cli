@@ -389,3 +389,20 @@ func TestExecute_MemberActivate(t *testing.T) {
     t.Fatalf("Unexpected member-activate options: %#v", parsedCommand)
   }
 }
+
+func TestExecute_MemberAdd(t *testing.T) {
+  parsedCommand, ok := Command(version, []string{"member-add", "bob"}).(command.MemberAdd)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.VaultAlias != "" || parsedCommand.VaultPath != "" || parsedCommand.MembersDirectory != "" {
+    t.Fatalf("Unexpected member-add command: %#v", parsedCommand)
+  }
+
+  parsedCommand, ok = Command(version, []string{"member-add", "bob", "--alias", "production", "--members-dir", "/private/members"}).(command.MemberAdd)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.VaultAlias != "production" || parsedCommand.VaultPath != "" || parsedCommand.MembersDirectory != "/private/members" {
+    t.Fatalf("Unexpected member-add options: %#v", parsedCommand)
+  }
+
+  parsedCommand, ok = Command(version, []string{"member-add", "bob", "--path", "/private/vault.json"}).(command.MemberAdd)
+  if !ok || parsedCommand.VaultPath != "/private/vault.json" || parsedCommand.VaultAlias != "" {
+    t.Fatalf("Unexpected member-add vault path: %#v", parsedCommand)
+  }
+}

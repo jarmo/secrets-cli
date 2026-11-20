@@ -135,6 +135,16 @@ Member bob activated!
 
 Setup codes expire after 48 hours. Both commands accept `--members-dir` to use the same member directory.
 
+Once activated, a member can be granted access to a vault:
+
+```
+$ secrets member-add bob --alias production
+Enter vault password: [vault password]
+Member bob added to vault!
+```
+
+`member-add` also accepts `--path` and `--members-dir`.
+
 ## Using multiple vaults
 
 Just append `--alias` after any command to operate against selected vault.

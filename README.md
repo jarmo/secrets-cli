@@ -171,6 +171,16 @@ Member bob removed from vault!
 
 Removing a member rotates the vault encryption key while retaining access for other members. Both commands accept `--path` and `--members-dir`. The member's account is not deleted; it can be added to a vault again. Old backups can still be opened with keys that were valid at the time.
 
+To revoke a member from all configured vaults and delete the account:
+
+```
+$ secrets member-destroy bob --member alice
+Enter member password: [Alice's password]
+Member bob destroyed!
+```
+
+The acting member must have access to every configured vault. The command checks all vaults before making changes and does not delete the account unless all revocations succeed. All vaults containing the member must be in the CLI configuration. Backups retain historical access.
+
 ## Using multiple vaults
 
 Just append `--alias` after any command to operate against selected vault.

@@ -31,3 +31,7 @@ func configurationPath() string {
 func MembersDirectory() string {
   return filepath.Join(filepath.Dir(configurationPath()), "members")
 }
+
+func Aliases() ([]string, error) {
+  return path.Aliases(configurationPath())
+}

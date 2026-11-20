@@ -353,7 +353,7 @@ func TestExecute_Initialize(t *testing.T) {
   vaultPath := "/foo/bar/baz"
   vaultAlias := "foo-bar"
 
-  switch parsedCommand := Command(version, []string{"initialize", "--path", vaultPath, "--alias", vaultAlias, "--member", "alice", "--members-dir", "/tmp/members"}).(type) {
+  switch parsedCommand := Command(version, []string{"initialize", "--path", vaultPath, "--alias", vaultAlias, "--user", "alice", "--users-dir", "/tmp/users"}).(type) {
     case command.Initialize:
       if parsedCommand.VaultPath != vaultPath {
         t.Fatalf("Expected vault path to be '%v', but was '%v'", vaultPath, parsedCommand.VaultPath)
@@ -361,100 +361,111 @@ func TestExecute_Initialize(t *testing.T) {
       if parsedCommand.VaultAlias != vaultAlias {
         t.Fatalf("Expected VaultAlias to be '%v' but was: '%v'", vaultAlias, parsedCommand.VaultAlias)
       }
-      if parsedCommand.Member != "alice" || parsedCommand.MembersDirectory != "/tmp/members" {
-        t.Fatalf("Expected member authentication during initialization: %+v", parsedCommand)
+      if parsedCommand.User != "alice" || parsedCommand.UsersDirectory != "/tmp/users" {
+        t.Fatalf("Expected user authentication during initialization: %+v", parsedCommand)
       }
     default:
       t.Fatalf("Got unexpected command: %T", parsedCommand)
   }
 }
 
-func TestExecute_MemberCreate(t *testing.T) {
-  parsedCommand, ok := Command(version, []string{"member-create", "bob"}).(command.MemberCreate)
-  if !ok || parsedCommand.Username != "bob" || parsedCommand.MembersDirectory != "" {
-    t.Fatalf("Unexpected member-create command: %#v", parsedCommand)
+func TestExecute_UserCreate(t *testing.T) {
+  parsedCommand, ok := Command(version, []string{"user-create", "bob"}).(command.UserCreate)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.UsersDirectory != "" {
+    t.Fatalf("Unexpected user-create command: %#v", parsedCommand)
   }
 
-  parsedCommand, ok = Command(version, []string{"member-create", "bob", "--members-dir", "/var/lib/secrets/members"}).(command.MemberCreate)
-  if !ok || parsedCommand.Username != "bob" || parsedCommand.MembersDirectory != "/var/lib/secrets/members" {
-    t.Fatalf("Unexpected member-create options: %#v", parsedCommand)
-  }
-}
-
-func TestExecute_MemberActivate(t *testing.T) {
-  parsedCommand, ok := Command(version, []string{"member-activate", "bob"}).(command.MemberActivate)
-  if !ok || parsedCommand.Username != "bob" || parsedCommand.MembersDirectory != "" {
-    t.Fatalf("Unexpected member-activate command: %#v", parsedCommand)
-  }
-
-  parsedCommand, ok = Command(version, []string{"member-activate", "bob", "--members-dir", "/var/lib/secrets/members"}).(command.MemberActivate)
-  if !ok || parsedCommand.Username != "bob" || parsedCommand.MembersDirectory != "/var/lib/secrets/members" {
-    t.Fatalf("Unexpected member-activate options: %#v", parsedCommand)
+  parsedCommand, ok = Command(version, []string{"user-create", "bob", "--users-dir", "/var/lib/secrets/users"}).(command.UserCreate)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.UsersDirectory != "/var/lib/secrets/users" {
+    t.Fatalf("Unexpected user-create options: %#v", parsedCommand)
   }
 }
 
-func TestExecute_MemberAdd(t *testing.T) {
-  parsedCommand, ok := Command(version, []string{"member-add", "bob"}).(command.MemberAdd)
-  if !ok || parsedCommand.Username != "bob" || parsedCommand.VaultAlias != "" || parsedCommand.VaultPath != "" || parsedCommand.MembersDirectory != "" {
-    t.Fatalf("Unexpected member-add command: %#v", parsedCommand)
+func TestExecute_UserActivate(t *testing.T) {
+  parsedCommand, ok := Command(version, []string{"user-activate", "bob"}).(command.UserActivate)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.UsersDirectory != "" {
+    t.Fatalf("Unexpected user-activate command: %#v", parsedCommand)
   }
 
-  parsedCommand, ok = Command(version, []string{"member-add", "bob", "--alias", "production", "--members-dir", "/private/members"}).(command.MemberAdd)
-  if !ok || parsedCommand.Username != "bob" || parsedCommand.VaultAlias != "production" || parsedCommand.VaultPath != "" || parsedCommand.MembersDirectory != "/private/members" {
-    t.Fatalf("Unexpected member-add options: %#v", parsedCommand)
+  parsedCommand, ok = Command(version, []string{"user-activate", "bob", "--users-dir", "/var/lib/secrets/users"}).(command.UserActivate)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.UsersDirectory != "/var/lib/secrets/users" {
+    t.Fatalf("Unexpected user-activate options: %#v", parsedCommand)
+  }
+}
+
+func TestExecute_UserAdd(t *testing.T) {
+  parsedCommand, ok := Command(version, []string{"user-add", "bob"}).(command.UserAdd)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.VaultAlias != "" || parsedCommand.VaultPath != "" || parsedCommand.UsersDirectory != "" {
+    t.Fatalf("Unexpected user-add command: %#v", parsedCommand)
   }
 
-  parsedCommand, ok = Command(version, []string{"member-add", "bob", "--path", "/private/vault.json"}).(command.MemberAdd)
+  parsedCommand, ok = Command(version, []string{"user-add", "bob", "--alias", "production", "--users-dir", "/private/users"}).(command.UserAdd)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.VaultAlias != "production" || parsedCommand.VaultPath != "" || parsedCommand.UsersDirectory != "/private/users" {
+    t.Fatalf("Unexpected user-add options: %#v", parsedCommand)
+  }
+
+  parsedCommand, ok = Command(version, []string{"user-add", "bob", "--path", "/private/vault.json"}).(command.UserAdd)
   if !ok || parsedCommand.VaultPath != "/private/vault.json" || parsedCommand.VaultAlias != "" {
-    t.Fatalf("Unexpected member-add vault path: %#v", parsedCommand)
+    t.Fatalf("Unexpected user-add vault path: %#v", parsedCommand)
   }
 }
 
-func TestExecute_MemberListAndRemove(t *testing.T) {
-  list := Command(version, []string{"member-list", "--alias", "production", "--members-dir", "/tmp/members"})
-  listed, ok := list.(command.MemberList)
-  if !ok || listed.VaultAlias != "production" || listed.MembersDirectory != "/tmp/members" {
-    t.Fatalf("Unexpected member-list command: %+v", list)
+func TestExecute_UserListAndRemove(t *testing.T) {
+  list := Command(version, []string{"user-list", "--alias", "production", "--users-dir", "/tmp/users"})
+  listed, ok := list.(command.UserList)
+  if !ok || listed.VaultAlias != "production" || listed.UsersDirectory != "/tmp/users" {
+    t.Fatalf("Unexpected user-list command: %+v", list)
   }
-  remove := Command(version, []string{"member-remove", "bob", "--path", "/tmp/vault", "--members-dir", "/tmp/members"})
-  removed, ok := remove.(command.MemberRemove)
-  if !ok || removed.Username != "bob" || removed.VaultPath != "/tmp/vault" || removed.MembersDirectory != "/tmp/members" {
-    t.Fatalf("Unexpected member-remove command: %+v", remove)
+  remove := Command(version, []string{"user-remove", "bob", "--path", "/tmp/vault", "--users-dir", "/tmp/users"})
+  removed, ok := remove.(command.UserRemove)
+  if !ok || removed.Username != "bob" || removed.VaultPath != "/tmp/vault" || removed.UsersDirectory != "/tmp/users" {
+    t.Fatalf("Unexpected user-remove command: %+v", remove)
   }
 }
 
-func TestParseMemberAuthenticationForVaultCommands(t *testing.T) {
+func TestParseUserAuthenticationForVaultCommands(t *testing.T) {
 	for _, args := range [][]string{
-		{"list", "--alias=production", "--member=alice", "--members-dir=/tmp/members"},
-		{"add", "example", "--member=alice", "--members-dir=/tmp/members"},
-		{"edit", uuid.NewV4().String(), "--member=alice", "--members-dir=/tmp/members"},
-		{"delete", uuid.NewV4().String(), "--member=alice", "--members-dir=/tmp/members"},
-		{"member-add", "bob", "--member=alice", "--members-dir=/tmp/members"},
-		{"member-list", "--member=alice", "--members-dir=/tmp/members"},
-		{"member-remove", "bob", "--member=alice", "--members-dir=/tmp/members"},
+		{"list", "--alias=production", "--user=alice", "--users-dir=/tmp/users"},
+		{"add", "example", "--user=alice", "--users-dir=/tmp/users"},
+		{"edit", uuid.NewV4().String(), "--user=alice", "--users-dir=/tmp/users"},
+		{"delete", uuid.NewV4().String(), "--user=alice", "--users-dir=/tmp/users"},
+		{"user-add", "bob", "--user=alice", "--users-dir=/tmp/users"},
+		{"user-list", "--user=alice", "--users-dir=/tmp/users"},
+		{"user-remove", "bob", "--user=alice", "--users-dir=/tmp/users"},
 	} {
 		parsed := Command(version, args)
-		var memberName, membersDirectory string
+		var userName, usersDirectory string
 		switch cmd := parsed.(type) {
 		case command.List:
-			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+			userName, usersDirectory = cmd.User, cmd.UsersDirectory
 		case command.Add:
-			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+			userName, usersDirectory = cmd.User, cmd.UsersDirectory
 		case command.Edit:
-			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+			userName, usersDirectory = cmd.User, cmd.UsersDirectory
 		case command.Delete:
-			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
-		case command.MemberAdd:
-			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
-		case command.MemberList:
-			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
-		case command.MemberRemove:
-			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+			userName, usersDirectory = cmd.User, cmd.UsersDirectory
+		case command.UserAdd:
+			userName, usersDirectory = cmd.User, cmd.UsersDirectory
+		case command.UserList:
+			userName, usersDirectory = cmd.User, cmd.UsersDirectory
+		case command.UserRemove:
+			userName, usersDirectory = cmd.User, cmd.UsersDirectory
 		default:
 			t.Fatalf("Unexpected command type %T for %v", parsed, args)
 		}
-		if memberName != "alice" || membersDirectory != "/tmp/members" {
-			t.Fatalf("Invalid member options for %v: %q %q", args, memberName, membersDirectory)
+		if userName != "alice" || usersDirectory != "/tmp/users" {
+			t.Fatalf("Invalid user options for %v: %q %q", args, userName, usersDirectory)
 		}
 	}
+}
+
+func TestExecute_UserDestroy(t *testing.T) {
+  switch parsedCommand := Command(version, []string{"user-destroy", "bob", "--user", "alice"}).(type) {
+  case command.UserDestroy:
+    if parsedCommand.Username != "bob" || parsedCommand.User != "alice" {
+      t.Fatalf("Unexpected user-destroy arguments: %+v", parsedCommand)
+    }
+  default:
+    t.Fatalf("Got unexpected command: %T", parsedCommand)
+  }
 }

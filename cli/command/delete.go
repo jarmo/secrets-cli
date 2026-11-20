@@ -12,12 +12,12 @@ type Delete struct {
   Id uuid.UUID
   VaultPath string
   VaultAlias string
-  Member string
-  MembersDirectory string
+  User string
+  UsersDirectory string
 }
 
 func (command Delete) Execute() {
-  openedVault := vaultfile.Open(vaultfile.Path(command.VaultAlias, command.VaultPath), command.Member, command.MembersDirectory)
+  openedVault := vaultfile.Open(vaultfile.Path(command.VaultAlias, command.VaultPath), command.User, command.UsersDirectory)
   deletedSecret, newSecrets, err := vault.Delete(openedVault.Secrets, command.Id)
   if err != nil {
     fmt.Println(err)

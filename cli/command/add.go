@@ -12,12 +12,12 @@ type Add struct {
   Name string
   VaultPath string
   VaultAlias string
-  Member string
-  MembersDirectory string
+  User string
+  UsersDirectory string
 }
 
 func (command Add) Execute() {
-  openedVault := vaultfile.Open(vaultfile.Path(command.VaultAlias, command.VaultPath), command.Member, command.MembersDirectory)
+  openedVault := vaultfile.Open(vaultfile.Path(command.VaultAlias, command.VaultPath), command.User, command.UsersDirectory)
   secretName := command.Name
   secretValue := input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", command.Name))
   newSecret, newSecrets := vault.Add(openedVault.Secrets, secretName, secretValue)

@@ -13,12 +13,12 @@ type Edit struct {
   Id uuid.UUID
   VaultPath string
   VaultAlias string
-  Member string
-  MembersDirectory string
+  User string
+  UsersDirectory string
 }
 
 func (command Edit) Execute() {
-  openedVault := vaultfile.Open(vaultfile.Path(command.VaultAlias, command.VaultPath), command.Member, command.MembersDirectory)
+  openedVault := vaultfile.Open(vaultfile.Path(command.VaultAlias, command.VaultPath), command.User, command.UsersDirectory)
   newName := input.Ask(fmt.Sprintf("Enter new name: "))
   newValue := input.AskMultiline("Enter new value:\n")
   editedSecret, newSecrets, err := vault.Edit(openedVault.Secrets, command.Id, newName, newValue)

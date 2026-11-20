@@ -18,34 +18,35 @@ Here's an output from `secrets --help` command.
 $ secrets COMMAND [OPTIONS]
 
 Usage:
-  secrets list [FILTER] [--member=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets add NAME [--member=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets edit ID [--member=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets delete ID [--member=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets list [FILTER] [--user=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets add NAME [--user=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets edit ID [--user=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets delete ID [--user=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets change-password [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS --member=USERNAME [--members-dir=MEMBERS_DIR]
-  secrets member-create MEMBER [--members-dir=MEMBERS_DIR]
-  secrets member-activate MEMBER [--members-dir=MEMBERS_DIR]
-  secrets member-add MEMBER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR] [--member=USERNAME]
-  secrets member-list [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR] [--member=USERNAME]
-  secrets member-remove MEMBER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--members-dir=MEMBERS_DIR] [--member=USERNAME]
+  secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS --user=USERNAME [--users-dir=USERS_DIR]
+  secrets user-create USER [--users-dir=USERS_DIR]
+  secrets user-activate USER [--users-dir=USERS_DIR]
+  secrets user-add USER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--users-dir=USERS_DIR] [--user=USERNAME]
+  secrets user-list [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--users-dir=USERS_DIR] [--user=USERNAME]
+  secrets user-remove USER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--users-dir=USERS_DIR] [--user=USERNAME]
+  secrets user-destroy USER --user=USERNAME [--users-dir=USERS_DIR]
 
 Options:
   --alias VAULT_ALIAS    Vault alias.
   --path VAULT_PATH      Vault path.
-  --members-dir MEMBERS_DIR    Member storage directory.
-  --member USERNAME    Authenticate using this member account.
+  --users-dir USERS_DIR    User storage directory.
+  --user USERNAME    Authenticate using this user account.
   -h --help              Show this screen.
   -v --version           Show version.
 ```
 
 ### Initializing Vault
 
-After creating and activating a member account (see **Member setup** below), create a vault and save its location and alias to a configuration file (supporting [XDG Base Directory standard](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)):
+After creating and activating a user account (see **User setup** below), create a vault and save its location and alias to a configuration file (supporting [XDG Base Directory standard](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)):
 
 ```
-$ secrets initialize --path /home/user/.secrets.json --alias main --member alice
-Enter member password: [Alice's password]
+$ secrets initialize --path /home/user/.secrets.json --alias main --user alice
+Enter user password: [Alice's password]
 Vault successfully created and configured at /home/user/.config/secrets/config.json!
 ```
 
@@ -54,8 +55,8 @@ Vault successfully created and configured at /home/user/.config/secrets/config.j
 Add your first secret:
 
 ```
-$ secrets add "my secret" --member alice
-Enter member password: [Alice's password]
+$ secrets add "my secret" --user alice
+Enter user password: [Alice's password]
 Enter value for 'my secret':
 my secret value
 Added: 
@@ -69,8 +70,8 @@ Because values can have multiple lines, you can enter whatever you want. Use ctr
 ### Listing All Secrets
 
 ```
-$ secrets list --member alice
-Enter member password: [Alice's password]
+$ secrets list --user alice
+Enter user password: [Alice's password]
 
 [299ed462-b171-4d67-ba21-264b221d9913]
 my secret
@@ -80,8 +81,8 @@ my secret value
 ### Listing Specific Secrets
 
 ```
-$ secrets list "secret" --member alice
-Enter member password: [Alice's password]
+$ secrets list "secret" --user alice
+Enter user password: [Alice's password]
 
 [299ed462-b171-4d67-ba21-264b221d9913]
 my secret
@@ -91,8 +92,8 @@ my secret value
 ### Editing a Secret
 
 ```
-$ secrets edit 299ed462-b171-4d67-ba21-264b221d9913 --member alice
-Enter member password: [Alice's password]
+$ secrets edit 299ed462-b171-4d67-ba21-264b221d9913 --user alice
+Enter user password: [Alice's password]
 Enter new name: different secret name
 Enter new value:
 different secret value
@@ -107,8 +108,8 @@ yet another secret value line
 ### Deleting a Secret
 
 ```
-$ secrets delete 299ed462-b171-4d67-ba21-264b221d9913 --member alice
-Enter member password: 
+$ secrets delete 299ed462-b171-4d67-ba21-264b221d9913 --user alice
+Enter user password: 
 Deleted: 
 [299ed462-b171-4d67-ba21-264b221d9913]
 different secret name
@@ -116,70 +117,70 @@ different secret value
 yet another secret value line
 ```
 
-### Member setup
+### User setup
 
-Create a member and share the generated setup code securely:
+Create a user and share the generated setup code securely:
 
 ```
-$ secrets member-create bob
+$ secrets user-create bob
 Setup code for bob (expires ...):
 [setup code]
 ```
 
-Bob activates the member account by choosing a password:
+Bob activates the user account by choosing a password:
 
 ```
-$ secrets member-activate bob
+$ secrets user-activate bob
 Enter setup code: [setup code]
-Enter new member password: [password]
-Enter new member password again: [password]
-Member bob activated!
+Enter new user password: [password]
+Enter new user password again: [password]
+User bob activated!
 ```
 
-Setup codes expire after 48 hours. Both commands accept `--members-dir` to use the same member directory.
+Setup codes expire after 48 hours. Both commands accept `--users-dir` to use the same user directory.
 
-Once activated, a member can be granted access to a vault:
-
-```
-$ secrets member-add bob --alias production --member alice
-Enter member password: [Alice's password]
-Member bob added to vault!
-```
-
-`member-add` also accepts `--path` and `--members-dir`.
-
-Once granted access, a member can use their own credentials with `--member`:
+Once activated, a user can be granted access to a vault:
 
 ```
-$ secrets list --alias production --member bob
-Enter member password: [Bob's password]
+$ secrets user-add bob --alias production --user alice
+Enter user password: [Alice's password]
+User bob added to vault!
 ```
 
-The same option works with `add`, `edit`, `delete`, `member-add`, `member-list` and `member-remove`. Use `--members-dir` if the accounts are stored outside the default directory.
+`user-add` also accepts `--path` and `--users-dir`.
 
-List members or revoke a member's access to a vault:
+Once granted access, a user can use their own credentials with `--user`:
 
 ```
-$ secrets member-list --alias production --member alice
+$ secrets list --alias production --user bob
+Enter user password: [Bob's password]
+```
+
+The same option works with `add`, `edit`, `delete`, `user-add`, `user-list` and `user-remove`. Use `--users-dir` if the accounts are stored outside the default directory.
+
+List users or revoke a user's access to a vault:
+
+```
+$ secrets user-list --alias production --user alice
 alice
 bob
 
-$ secrets member-remove bob --alias production --member alice
-Enter member password: [Alice's password]
-Member bob removed from vault!
+$ secrets user-remove bob --alias production --user alice
+Enter user password: [Alice's password]
+User bob removed from vault!
 ```
 
-Removing a member rotates the vault encryption key while retaining access for other members. Both commands accept `--path` and `--members-dir`. The member's account is not deleted; it can be added to a vault again. Old backups can still be opened with keys that were valid at the time.
+Removing a user rotates the vault encryption key while retaining access for other users. Both commands accept `--path` and `--users-dir`. The user's account is not deleted; it can be added to a vault again. Old backups can still be opened with keys that were valid at the time.
 
-To revoke a member from all configured vaults and delete the account:
+To revoke a user from all configured vaults and delete the account:
 
 ```
-$ secrets member-destroy bob --member alice
-Enter member password: [Alice's password]
-Member bob destroyed!
+$ secrets user-destroy bob --user alice
+Enter user password: [Alice's password]
+User bob destroyed!
 ```
 
-The acting member must have access to every configured vault. The command checks all vaults before making changes and does not delete the account unless all revocations succeed. All vaults containing the member must be in the CLI configuration. Backups retain historical access.
+The acting user must have access to every configured vault. The command checks all vaults before making changes and does not delete the account unless all revocations succeed. All vaults containing the user must be in the CLI configuration. Backups retain historical access.
 
 ## Using multiple vaults
 
@@ -195,7 +196,7 @@ Since you can specify vault storage location then it is up to you how (or if eve
 
 Starting with version 7.x, vaults use a new format that supports sharing between users. Legacy vaults are automatically converted to the new format when written. Support for the legacy format will be removed in the next major version.
 
-To share a legacy vault, run `secrets member-add alice --alias production` and enter the original vault password. This grants Alice access and retires the vault password. For vaults already shared with members, running `member-add` for an existing member also retires any remaining vault-password access.
+To share a legacy vault, run `secrets user-add alice --alias production` and enter the original vault password. This grants Alice access and retires the vault password. For vaults already shared with users, running `user-add` for an existing user also retires any remaining vault-password access.
 
 ## Development
 

@@ -4,6 +4,7 @@ import (
   "path/filepath"
   "github.com/pinzolo/xdgdir"
   "github.com/jarmo/secrets/storage/path"
+  "github.com/jarmo/secrets/user"
 )
 
 func Get(alias string) (string, error) {
@@ -28,8 +29,8 @@ func configurationPath() string {
   return xdgConfigurationFilePath
 }
 
-func MembersDirectory() string {
-  return filepath.Join(filepath.Dir(configurationPath()), "members")
+func UsersDirectory() string {
+  return user.DefaultDirectory(filepath.Dir(configurationPath()))
 }
 
 func Aliases() ([]string, error) {

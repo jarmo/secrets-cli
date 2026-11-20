@@ -8,14 +8,14 @@ import (
 	"testing"
 
 	"github.com/jarmo/secrets/crypto"
-	"github.com/jarmo/secrets/member"
+	"github.com/jarmo/secrets/user"
 	"github.com/jarmo/secrets/secret"
 	"github.com/jarmo/secrets/storage"
 )
 
-func TestAddMember(t *testing.T) {
-	directory := filepath.Join(t.TempDir(), "members")
-	setupCode, _, err := member.CreatePending(directory, "bob")
+func TestAddUser(t *testing.T) {
+	directory := filepath.Join(t.TempDir(), "users")
+	setupCode, _, err := user.CreatePending(directory, "bob")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,41 +23,41 @@ func TestAddMember(t *testing.T) {
 	if err := storage.Initialize(vaultPath, []byte("vault-password")); err != nil {
 		t.Fatal(err)
 	}
-	if err := addMember(vaultPath, directory, "bob", []byte("vault-password")); err == nil {
-		t.Fatal("Pending member was granted access")
+	if err := addUser(vaultPath, directory, "bob", []byte("vault-password")); err == nil {
+		t.Fatal("Pending user was granted access")
 	}
-	if err := member.Activate(directory, "bob", setupCode, []byte("bob-password")); err != nil {
+	if err := user.Activate(directory, "bob", setupCode, []byte("bob-password")); err != nil {
 		t.Fatal(err)
 	}
-	if err := addMember(vaultPath, directory, "bob", []byte("incorrect")); err == nil {
+	if err := addUser(vaultPath, directory, "bob", []byte("incorrect")); err == nil {
 		t.Fatal("Incorrect vault password granted access")
 	}
-	if err := addMember(vaultPath, directory, "bob", []byte("vault-password")); err != nil {
+	if err := addUser(vaultPath, directory, "bob", []byte("vault-password")); err != nil {
 		t.Fatal(err)
 	}
-	_, privateKey, err := member.Authenticate(directory, "bob", []byte("bob-password"))
+	_, privateKey, err := user.Authenticate(directory, "bob", []byte("bob-password"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := storage.WriteForMember(vaultPath, privateKey, []secret.Secret{secret.New("api", "token")}); err != nil {
+	if err := storage.WriteForUser(vaultPath, privateKey, []secret.Secret{secret.New("api", "token")}); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := storage.Read(vaultPath, []byte("vault-password")); err == nil {
 		t.Fatal("Original vault password still unlocks the vault")
 	}
-	entries, err := storage.ReadForMember(vaultPath, privateKey)
+	entries, err := storage.ReadForUser(vaultPath, privateKey)
 	if err != nil || len(entries) != 1 || entries[0].Value != "token" {
-		t.Fatalf("Member access broken: %v, %v", entries, err)
+		t.Fatalf("User access broken: %v, %v", entries, err)
 	}
 	before, err := os.ReadFile(vaultPath)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if bytes.Contains(before, []byte("bob")) {
-		t.Fatal("Vault file exposes member username")
+		t.Fatal("Vault file exposes user username")
 	}
-	if err := addMemberForMember(vaultPath, directory, "bob", privateKey); err == nil {
-		t.Fatal("Duplicate member association succeeded")
+	if err := addUserForUser(vaultPath, directory, "bob", privateKey); err == nil {
+		t.Fatal("Duplicate user association succeeded")
 	}
 	after, err := os.ReadFile(vaultPath)
 	if err != nil || !bytes.Equal(before, after) {
@@ -65,9 +65,9 @@ func TestAddMember(t *testing.T) {
 	}
 }
 
-func TestAddMemberMigratesLegacyVault(t *testing.T) {
-	directory := filepath.Join(t.TempDir(), "members")
-	if err := member.Register(directory, "alice", []byte("alice-password")); err != nil {
+func TestAddUserMigratesLegacyVault(t *testing.T) {
+	directory := filepath.Join(t.TempDir(), "users")
+	if err := user.Register(directory, "alice", []byte("alice-password")); err != nil {
 		t.Fatal(err)
 	}
 	vaultPath := filepath.Join(t.TempDir(), "legacy.json")
@@ -80,21 +80,21 @@ func TestAddMemberMigratesLegacyVault(t *testing.T) {
 	if err := os.WriteFile(vaultPath, data, 0600); err != nil {
 		t.Fatal(err)
 	}
-	if err := addMember(vaultPath, directory, "alice", []byte("bad-password")); err == nil {
+	if err := addUser(vaultPath, directory, "alice", []byte("bad-password")); err == nil {
 		t.Fatal("Incorrect password migrated legacy vault")
 	}
 	original, _ := os.ReadFile(vaultPath)
 	if !bytes.Equal(original, data) {
 		t.Fatal("Failed migration modified legacy vault")
 	}
-	if err := addMember(vaultPath, directory, "alice", []byte("legacy-password")); err != nil {
+	if err := addUser(vaultPath, directory, "alice", []byte("legacy-password")); err != nil {
 		t.Fatal(err)
 	}
-	_, privateKey, err := member.Authenticate(directory, "alice", []byte("alice-password"))
+	_, privateKey, err := user.Authenticate(directory, "alice", []byte("alice-password"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	entries, err := storage.ReadForMember(vaultPath, privateKey)
+	entries, err := storage.ReadForUser(vaultPath, privateKey)
 	if err != nil || len(entries) != 1 || entries[0] != contents[0] {
 		t.Fatalf("Legacy vault contents lost: %v, %v", entries, err)
 	}

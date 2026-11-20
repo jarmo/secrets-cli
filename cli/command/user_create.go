@@ -5,20 +5,20 @@ import (
 	"os"
 
 	"github.com/jarmo/secrets-cli/v6/storage/path"
-	"github.com/jarmo/secrets/member"
+	"github.com/jarmo/secrets/user"
 )
 
-type MemberCreate struct {
+type UserCreate struct {
 	Username         string
-	MembersDirectory string
+	UsersDirectory string
 }
 
-func (command MemberCreate) Execute() {
-	directory := command.MembersDirectory
+func (command UserCreate) Execute() {
+	directory := command.UsersDirectory
 	if directory == "" {
-		directory = path.MembersDirectory()
+		directory = path.UsersDirectory()
 	}
-	code, expiresAt, err := member.CreatePending(directory, command.Username)
+	code, expiresAt, err := user.CreatePending(directory, command.Username)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

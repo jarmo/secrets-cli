@@ -3,7 +3,7 @@ package command
 import (
   "fmt"
   "os"
-  "github.com/jarmo/secrets/member"
+  "github.com/jarmo/secrets/user"
   "github.com/jarmo/secrets/storage"
   "github.com/jarmo/secrets-cli/v6/input"
   "github.com/jarmo/secrets-cli/v6/storage/path"
@@ -12,22 +12,22 @@ import (
 type Initialize struct {
   VaultPath string
   VaultAlias string
-  Member string
-  MembersDirectory string
+  User string
+  UsersDirectory string
 }
 
 func (command Initialize) Execute() {
-  directory := command.MembersDirectory
+  directory := command.UsersDirectory
   if directory == "" {
-    directory = path.MembersDirectory()
+    directory = path.UsersDirectory()
   }
-  password := input.AskPassword("Enter member password: ")
+  password := input.AskPassword("Enter user password: ")
   defer func() {
     for index := range password {
       password[index] = 0
     }
   }()
-  if err := initializeVault(command.VaultPath, directory, command.Member, password); err != nil {
+  if err := initializeVault(command.VaultPath, directory, command.User, password); err != nil {
     fmt.Fprintln(os.Stderr, err)
     os.Exit(1)
   }
@@ -35,10 +35,10 @@ func (command Initialize) Execute() {
   fmt.Println(fmt.Sprintf("Vault successfully created and configured at %s!", configurationPath))
 }
 
-func initializeVault(vaultPath, membersDirectory, username string, password []byte) error {
-  record, _, err := member.Authenticate(membersDirectory, username, password)
+func initializeVault(vaultPath, usersDirectory, username string, password []byte) error {
+  record, _, err := user.Authenticate(usersDirectory, username, password)
   if err != nil {
     return err
   }
-  return storage.InitializeForMember(vaultPath, record.Identity)
+  return storage.InitializeForUser(vaultPath, record.Identity)
 }

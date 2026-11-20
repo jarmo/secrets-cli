@@ -24,10 +24,13 @@ Usage:
   secrets delete ID [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets change-password [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS
+  secrets member-create MEMBER [--members-dir=MEMBERS_DIR]
+  secrets member-activate MEMBER [--members-dir=MEMBERS_DIR]
 
 Options:
   --alias VAULT_ALIAS    Vault alias.
   --path VAULT_PATH      Vault path.
+  --members-dir MEMBERS_DIR    Member storage directory.
   -h --help              Show this screen.
   -v --version           Show version.
 ```
@@ -109,6 +112,28 @@ different secret name
 different secret value
 yet another secret value line
 ```
+
+### Member setup
+
+Create a member and share the generated setup code securely:
+
+```
+$ secrets member-create bob
+Setup code for bob (expires ...):
+[setup code]
+```
+
+Bob activates the member account by choosing a password:
+
+```
+$ secrets member-activate bob
+Enter setup code: [setup code]
+Enter new member password: [password]
+Enter new member password again: [password]
+Member bob activated!
+```
+
+Setup codes expire after 48 hours. Both commands accept `--members-dir` to use the same member directory.
 
 ## Using multiple vaults
 

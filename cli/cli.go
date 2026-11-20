@@ -21,10 +21,13 @@ Usage:
   secrets delete ID [--alias=VAULT_PATH | --path=VAULT_PATH]
   secrets change-password [--alias=VAULT_PATH | --path=VAULT_PATH]
   secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS
+  secrets member-create MEMBER [--members-dir=MEMBERS_DIR]
+  secrets member-activate MEMBER [--members-dir=MEMBERS_DIR]
 
 Options:
   --alias VAULT_ALIAS    Optional vault alias.
   --path VAULT_PATH      Optional vault path. Defaults to the path in configuration.
+  --members-dir MEMBERS_DIR    Optional member storage directory.
   -h --help              Show this screen.
   -v --version           Show version.`
 }
@@ -49,6 +52,12 @@ func createCommand(arguments map[string]interface {}) command.Executable {
     return command.Delete{Id: id, VaultAlias: vaultAlias, VaultPath: vaultPath}
   } else if arguments["change-password"].(bool) {
     return command.ChangePassword{VaultAlias: vaultAlias, VaultPath: vaultPath}
+  } else if arguments["member-create"].(bool) {
+    directory, _ := arguments["--members-dir"].(string)
+    return command.MemberCreate{Username: arguments["MEMBER"].(string), MembersDirectory: directory}
+  } else if arguments["member-activate"].(bool) {
+    directory, _ := arguments["--members-dir"].(string)
+    return command.MemberActivate{Username: arguments["MEMBER"].(string), MembersDirectory: directory}
   } else if arguments["initialize"].(bool) {
     return command.Initialize{VaultAlias: vaultAlias, VaultPath: vaultPath}
   } else {

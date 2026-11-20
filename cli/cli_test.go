@@ -365,3 +365,27 @@ func TestExecute_Initialize(t *testing.T) {
       t.Fatalf("Got unexpected command: %T", parsedCommand)
   }
 }
+
+func TestExecute_MemberCreate(t *testing.T) {
+  parsedCommand, ok := Command(version, []string{"member-create", "bob"}).(command.MemberCreate)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.MembersDirectory != "" {
+    t.Fatalf("Unexpected member-create command: %#v", parsedCommand)
+  }
+
+  parsedCommand, ok = Command(version, []string{"member-create", "bob", "--members-dir", "/var/lib/secrets/members"}).(command.MemberCreate)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.MembersDirectory != "/var/lib/secrets/members" {
+    t.Fatalf("Unexpected member-create options: %#v", parsedCommand)
+  }
+}
+
+func TestExecute_MemberActivate(t *testing.T) {
+  parsedCommand, ok := Command(version, []string{"member-activate", "bob"}).(command.MemberActivate)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.MembersDirectory != "" {
+    t.Fatalf("Unexpected member-activate command: %#v", parsedCommand)
+  }
+
+  parsedCommand, ok = Command(version, []string{"member-activate", "bob", "--members-dir", "/var/lib/secrets/members"}).(command.MemberActivate)
+  if !ok || parsedCommand.Username != "bob" || parsedCommand.MembersDirectory != "/var/lib/secrets/members" {
+    t.Fatalf("Unexpected member-activate options: %#v", parsedCommand)
+  }
+}

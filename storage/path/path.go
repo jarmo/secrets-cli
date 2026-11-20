@@ -1,6 +1,7 @@
 package path
 
 import (
+  "path/filepath"
   "github.com/pinzolo/xdgdir"
   "github.com/jarmo/secrets/storage/path"
 )
@@ -25,4 +26,8 @@ func configurationPath() string {
   }
 
   return xdgConfigurationFilePath
+}
+
+func MembersDirectory() string {
+  return filepath.Join(filepath.Dir(configurationPath()), "members")
 }

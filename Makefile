@@ -1,7 +1,7 @@
 BINARY = secrets
+INSTALL_DIR ?= $(or $(shell go env GOBIN),$(shell go env GOPATH)/bin)
 GOARCH = amd64
 GO_BUILD = GOARCH=${GOARCH} go build -mod=vendor
-PREFIX ?= ${GOPATH}
 
 all: test clean linux freebsd openbsd darwin windows
 
@@ -9,8 +9,8 @@ clean:
 	rm -rf bin/
 
 vendor:
-	go mod vendor
 	go mod tidy
+	go mod vendor
 
 linux: vendor
 	GOOS=linux ${GO_BUILD} -o bin/linux_${GOARCH}/${BINARY}
@@ -30,8 +30,9 @@ windows: vendor
 test: vendor
 	script/run_tests.sh
 
-install:
-	cp -Rf bin/ "${PREFIX}/bin"
+install: vendor
+	install -d "$(INSTALL_DIR)"
+	go build -mod=vendor -o "$(INSTALL_DIR)/$(BINARY)" .
 
 release: all
 	script/release.sh

@@ -2,7 +2,7 @@ package command
 
 import (
   "fmt"
-  "github.com/jarmo/secrets/storage"
+  "os"
   "github.com/jarmo/secrets/vault"
   "github.com/jarmo/secrets-cli/v6/cli/vaultfile"
   "github.com/jarmo/secrets-cli/v6/input"
@@ -12,14 +12,19 @@ type Add struct {
   Name string
   VaultPath string
   VaultAlias string
+  Member string
+  MembersDirectory string
 }
 
 func (command Add) Execute() {
-  secrets, path, password := vaultfile.Read(vaultfile.Path(command.VaultAlias, command.VaultPath))
+  openedVault := vaultfile.Open(vaultfile.Path(command.VaultAlias, command.VaultPath), command.Member, command.MembersDirectory)
   secretName := command.Name
   secretValue := input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", command.Name))
-  newSecret, newSecrets := vault.Add(secrets, secretName, secretValue)
-  storage.Write(path, password, newSecrets)
+  newSecret, newSecrets := vault.Add(openedVault.Secrets, secretName, secretValue)
+  if err := openedVault.Write(newSecrets); err != nil {
+    fmt.Fprintln(os.Stderr, err)
+    os.Exit(1)
+  }
   fmt.Println("Added:", newSecret)
 }
 

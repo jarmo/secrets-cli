@@ -7,6 +7,7 @@ import (
 	"github.com/jarmo/secrets-cli/v6/cli/vaultfile"
 	"github.com/jarmo/secrets-cli/v6/input"
 	"github.com/jarmo/secrets-cli/v6/storage/path"
+	"github.com/jarmo/secrets/crypto"
 	"github.com/jarmo/secrets/storage"
 )
 
@@ -14,6 +15,7 @@ type MemberList struct {
 	VaultAlias       string
 	VaultPath        string
 	MembersDirectory string
+	Member           string
 }
 
 func (command MemberList) Execute() {
@@ -22,7 +24,14 @@ func (command MemberList) Execute() {
 		directory = path.MembersDirectory()
 	}
 	vaultPath := vaultfile.Path(command.VaultAlias, command.VaultPath)
-	members, err := storage.ListMembers(vaultPath, directory, input.AskVaultPassword())
+	var members []crypto.VaultMember
+	var err error
+	if command.Member != "" {
+		openedVault := vaultfile.Open(vaultPath, command.Member, directory)
+		members, err = storage.ListMembersForMember(vaultPath, directory, openedVault.PrivateKey())
+	} else {
+		members, err = storage.ListMembers(vaultPath, directory, input.AskVaultPassword())
+	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

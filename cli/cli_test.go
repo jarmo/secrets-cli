@@ -419,3 +419,39 @@ func TestExecute_MemberListAndRemove(t *testing.T) {
     t.Fatalf("Unexpected member-remove command: %+v", remove)
   }
 }
+
+func TestParseMemberAuthenticationForVaultCommands(t *testing.T) {
+	for _, args := range [][]string{
+		{"list", "--alias=production", "--member=alice", "--members-dir=/tmp/members"},
+		{"add", "example", "--member=alice", "--members-dir=/tmp/members"},
+		{"edit", uuid.NewV4().String(), "--member=alice", "--members-dir=/tmp/members"},
+		{"delete", uuid.NewV4().String(), "--member=alice", "--members-dir=/tmp/members"},
+		{"member-add", "bob", "--member=alice", "--members-dir=/tmp/members"},
+		{"member-list", "--member=alice", "--members-dir=/tmp/members"},
+		{"member-remove", "bob", "--member=alice", "--members-dir=/tmp/members"},
+	} {
+		parsed := Command(version, args)
+		var memberName, membersDirectory string
+		switch cmd := parsed.(type) {
+		case command.List:
+			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+		case command.Add:
+			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+		case command.Edit:
+			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+		case command.Delete:
+			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+		case command.MemberAdd:
+			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+		case command.MemberList:
+			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+		case command.MemberRemove:
+			memberName, membersDirectory = cmd.Member, cmd.MembersDirectory
+		default:
+			t.Fatalf("Unexpected command type %T for %v", parsed, args)
+		}
+		if memberName != "alice" || membersDirectory != "/tmp/members" {
+			t.Fatalf("Invalid member options for %v: %q %q", args, memberName, membersDirectory)
+		}
+	}
+}

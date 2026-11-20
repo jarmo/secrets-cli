@@ -145,6 +145,15 @@ Member bob added to vault!
 
 `member-add` also accepts `--path` and `--members-dir`.
 
+Once granted access, a member can use their own credentials with `--member`:
+
+```
+$ secrets list --alias production --member bob
+Enter member password: [Bob's password]
+```
+
+The same option works with `add`, `edit`, `delete`, `member-add`, `member-list` and `member-remove`. It also accepts `--members-dir` if the accounts are stored outside the default directory. Without `--member`, the CLI continues to ask for the original vault password.
+
 List members or revoke a member's access to a vault:
 
 ```

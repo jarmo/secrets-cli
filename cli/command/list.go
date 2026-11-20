@@ -10,11 +10,13 @@ type List struct {
   Filter string
   VaultPath string
   VaultAlias string
+  Member string
+  MembersDirectory string
 }
 
 func (command List) Execute() {
-  secrets, _, _ := vaultfile.Read(vaultfile.Path(command.VaultAlias, command.VaultPath))
-  for _, secret := range vault.List(secrets, command.Filter) {
+  openedVault := vaultfile.Open(vaultfile.Path(command.VaultAlias, command.VaultPath), command.Member, command.MembersDirectory)
+  for _, secret := range vault.List(openedVault.Secrets, command.Filter) {
     fmt.Println(secret)
   }
 }

@@ -15,6 +15,7 @@ type MemberRemove struct {
 	VaultAlias       string
 	VaultPath        string
 	MembersDirectory string
+	Member           string
 }
 
 func (command MemberRemove) Execute() {
@@ -23,7 +24,14 @@ func (command MemberRemove) Execute() {
 		directory = path.MembersDirectory()
 	}
 	vaultPath := vaultfile.Path(command.VaultAlias, command.VaultPath)
-	if err := storage.RemoveMember(vaultPath, directory, command.Username, input.AskVaultPassword()); err != nil {
+	var err error
+	if command.Member != "" {
+		openedVault := vaultfile.Open(vaultPath, command.Member, directory)
+		err = storage.RemoveMemberForMember(vaultPath, directory, command.Username, openedVault.PrivateKey())
+	} else {
+		err = storage.RemoveMember(vaultPath, directory, command.Username, input.AskVaultPassword())
+	}
+	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

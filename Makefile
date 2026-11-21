@@ -40,6 +40,7 @@ install: vendor
 	go build -mod=vendor -ldflags="-X main.version=$(BUILD_VERSION)" -o "$(INSTALL_DIR)/$(BINARY)" .
 
 release:
+	script/release.sh --check
 	$(MAKE) all BUILD_VERSION=$(RELEASE_VERSION)
 	script/release.sh
 

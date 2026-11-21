@@ -1,0 +1,115 @@
+_secrets_completion() {
+  local current="${COMP_WORDS[COMP_CWORD]}"
+  local previous=""
+  local subcommand="${COMP_WORDS[1]}"
+  local users_dir=""
+  local option candidate prefix i
+  local positional_count=0
+  local positional_expected=false
+  local -a options
+  COMPREPLY=()
+
+  if (( COMP_CWORD > 0 )); then
+    previous="${COMP_WORDS[COMP_CWORD-1]}"
+  fi
+  if (( COMP_CWORD == 1 )); then
+    COMPREPLY=( $(compgen -W 'list add edit delete initialize user-create user-activate user-add user-list user-remove user-destroy user-password-change completion --help -h --version -v' -- "$current") )
+    return
+  fi
+
+  for ((i=2; i<COMP_CWORD; i++)); do
+    case "${COMP_WORDS[i]}" in
+      --users-dir=*) users_dir="${COMP_WORDS[i]#--users-dir=}" ;;
+      --users-dir) if (( i+1 < COMP_CWORD )); then ((i++)); users_dir="${COMP_WORDS[i]}"; fi ;;
+      --alias|--user|--path) ((i++)) ;;
+      -*) ;;
+      *) ((positional_count+=1)) ;;
+    esac
+  done
+
+  case "$previous" in
+    --alias)
+      while IFS= read -r candidate; do
+        [[ "$candidate" == "$current"* ]] && COMPREPLY+=("$candidate")
+      done < <(command secrets __complete aliases)
+      return ;;
+    --user)
+      while IFS= read -r candidate; do
+        [[ "$candidate" == "$current"* ]] && COMPREPLY+=("$candidate")
+      done < <(command secrets __complete users "$users_dir")
+      return ;;
+    --path|--users-dir)
+      compopt -o filenames
+      if [[ "$previous" == --users-dir ]]; then
+        while IFS= read -r candidate; do COMPREPLY+=("$candidate"); done < <(compgen -d -- "$current")
+      else
+        while IFS= read -r candidate; do COMPREPLY+=("$candidate"); done < <(compgen -f -- "$current")
+      fi
+      return ;;
+  esac
+
+  case "$current" in
+    --alias=*|--user=*)
+      prefix="${current%%=*}="
+      if [[ "$prefix" == '--alias=' ]]; then
+        while IFS= read -r candidate; do
+          [[ "$candidate" == "${current#*=}"* ]] && COMPREPLY+=("$prefix$candidate")
+        done < <(command secrets __complete aliases)
+      else
+        while IFS= read -r candidate; do
+          [[ "$candidate" == "${current#*=}"* ]] && COMPREPLY+=("$prefix$candidate")
+        done < <(command secrets __complete users "$users_dir")
+      fi
+      return ;;
+    --path=*|--users-dir=*)
+      prefix="${current%%=*}="
+      compopt -o filenames
+      if [[ "$prefix" == --users-dir= ]]; then
+        while IFS= read -r candidate; do COMPREPLY+=("$prefix$candidate"); done < <(compgen -d -- "${current#*=}")
+      else
+        while IFS= read -r candidate; do COMPREPLY+=("$prefix$candidate"); done < <(compgen -f -- "${current#*=}")
+      fi
+      return ;;
+  esac
+
+  if (( positional_count == 0 )); then
+    case "$subcommand" in
+      add|edit|delete|user-create|user-activate|user-add|user-remove|user-destroy|user-password-change|completion)
+        positional_expected=true ;;
+    esac
+  fi
+
+  if [[ "$current" == -* ]] || { [[ -z "$current" && "$positional_expected" == false ]]; }; then
+    case "$subcommand" in
+      list|add|edit|delete|user-add|user-list|user-remove)
+        options=(--alias --path --user --users-dir --help -h) ;;
+      initialize)
+        options=(--alias --path --user --users-dir --help -h) ;;
+      user-destroy)
+        options=(--user --users-dir --help -h) ;;
+      user-create|user-activate|user-password-change)
+        options=(--users-dir --help -h) ;;
+      *) options=(--help -h) ;;
+    esac
+    for option in "${options[@]}"; do
+      [[ "$option" == "$current"* ]] && COMPREPLY+=("$option")
+    done
+    return
+  fi
+
+  if [[ "$positional_expected" == true ]]; then
+    case "$subcommand" in
+      user-activate)
+        while IFS= read -r candidate; do
+          [[ "$candidate" == "$current"* ]] && COMPREPLY+=("$candidate")
+        done < <(command secrets __complete pending "$users_dir") ;;
+      user-add|user-remove|user-destroy|user-password-change)
+        while IFS= read -r candidate; do
+          [[ "$candidate" == "$current"* ]] && COMPREPLY+=("$candidate")
+        done < <(command secrets __complete users "$users_dir") ;;
+      completion) COMPREPLY=( $(compgen -W 'bash zsh' -- "$current") ) ;;
+    esac
+  fi
+}
+
+complete -F _secrets_completion secrets

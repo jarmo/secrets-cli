@@ -1,0 +1,84 @@
+#compdef secrets
+  local current="${words[CURRENT]}"
+  local previous="${words[CURRENT-1]}"
+  local subcommand="${words[2]}"
+  local users_dir=""
+  local i
+  local positional_count=0
+  local positional_expected=false
+  local -a choices options
+
+  if (( CURRENT == 2 )); then
+    compadd -- list add edit delete initialize user-create user-activate user-add user-list user-remove user-destroy user-password-change completion --help -h --version -v
+    return
+  fi
+
+  for ((i=3; i<CURRENT; i++)); do
+    case "${words[i]}" in
+      --users-dir=*) users_dir="${words[i]#--users-dir=}" ;;
+      --users-dir) if (( i+1 < CURRENT )); then ((i++)); users_dir="${words[i]}"; fi ;;
+      --alias|--user|--path) ((i++)) ;;
+      -*) ;;
+      *) ((positional_count+=1)) ;;
+    esac
+  done
+
+  case "$previous" in
+    --alias)
+      choices=( "${(@f)$(command secrets __complete aliases)}" )
+      (( ${#choices[@]} )) && compadd -- "${choices[@]}"
+      return ;;
+    --user)
+      choices=( "${(@f)$(command secrets __complete users "$users_dir")}" )
+      (( ${#choices[@]} )) && compadd -- "${choices[@]}"
+      return ;;
+    --path) _files; return ;;
+    --users-dir) _files -/; return ;;
+  esac
+
+  case "$current" in
+    --alias=*)
+      compset -P '--alias='
+      choices=( "${(@f)$(command secrets __complete aliases)}" )
+      (( ${#choices[@]} )) && compadd -P '--alias=' -- "${choices[@]}"
+      return ;;
+    --user=*)
+      compset -P '--user='
+      choices=( "${(@f)$(command secrets __complete users "$users_dir")}" )
+      (( ${#choices[@]} )) && compadd -P '--user=' -- "${choices[@]}"
+      return ;;
+    --path=*) compset -P '--path='; _files -P '--path='; return ;;
+    --users-dir=*) compset -P '--users-dir='; _files -/ -P '--users-dir='; return ;;
+  esac
+
+  if (( positional_count == 0 )); then
+    case "$subcommand" in
+      add|edit|delete|user-create|user-activate|user-add|user-remove|user-destroy|user-password-change|completion)
+        positional_expected=true ;;
+    esac
+  fi
+
+  if [[ "$current" == -* ]] || { [[ -z "$current" && "$positional_expected" == false ]]; }; then
+    case "$subcommand" in
+      list|add|edit|delete|user-add|user-list|user-remove|initialize)
+        options=(--alias --path --user --users-dir --help -h) ;;
+      user-destroy) options=(--user --users-dir --help -h) ;;
+      user-create|user-activate|user-password-change)
+        options=(--users-dir --help -h) ;;
+      *) options=(--help -h) ;;
+    esac
+    compadd -- "${options[@]}"
+    return
+  fi
+
+  if [[ "$positional_expected" == true ]]; then
+    case "$subcommand" in
+      user-activate)
+        choices=( "${(@f)$(command secrets __complete pending "$users_dir")}" )
+        (( ${#choices[@]} )) && compadd -- "${choices[@]}" ;;
+      user-add|user-remove|user-destroy|user-password-change)
+        choices=( "${(@f)$(command secrets __complete users "$users_dir")}" )
+        (( ${#choices[@]} )) && compadd -- "${choices[@]}" ;;
+      completion) compadd -- bash zsh ;;
+    esac
+  fi

@@ -7,6 +7,13 @@ import (
 )
 
 func Command(version string, args []string) command.Executable {
+  if len(args) >= 2 && args[0] == "__complete" {
+    directory := ""
+    if len(args) > 2 {
+      directory = args[2]
+    }
+    return command.Completion{CandidateKind: args[1], UsersDirectory: directory}
+  }
   arguments, _ := docopt.Parse(createUsage(), args, true, version, false)
   return createCommand(arguments)
 }
@@ -27,6 +34,7 @@ Usage:
   secrets user-list [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--users-dir=USERS_DIR] [--user=USERNAME]
   secrets user-remove USER [--alias=VAULT_ALIAS | --path=VAULT_PATH] [--users-dir=USERS_DIR] [--user=USERNAME]
   secrets user-destroy USER --user=USERNAME [--users-dir=USERS_DIR]
+  secrets completion (bash | zsh)
 
 Options:
   --alias VAULT_ALIAS    Optional vault alias.
@@ -76,6 +84,11 @@ func createCommand(arguments map[string]interface {}) command.Executable {
     return command.UserRemove{Username: arguments["USER"].(string), VaultAlias: vaultAlias, VaultPath: vaultPath, UsersDirectory: directory, User: authenticatedUser}
   } else if arguments["user-destroy"].(bool) {
     return command.UserDestroy{Username: arguments["USER"].(string), User: authenticatedUser, UsersDirectory: usersDirectory}
+  } else if arguments["completion"].(bool) {
+    if arguments["bash"].(bool) {
+      return command.Completion{Shell: "bash"}
+    }
+    return command.Completion{Shell: "zsh"}
   } else if arguments["initialize"].(bool) {
     return command.Initialize{VaultAlias: vaultAlias, VaultPath: vaultPath, User: authenticatedUser, UsersDirectory: usersDirectory}
   } else {

@@ -93,6 +93,36 @@ Starting with version 7.x, vaults use a format that supports multiple users. Old
 
 A regular write also upgrades an old vault format, but the old password remains valid until user-based access is established with `user-add`. Back up old vaults before conversion. Support for the legacy format will be removed in the next major version.
 
+## Shell completion
+
+Generate completion scripts for Bash or Zsh. Completion suggests commands, options, configured vault aliases, and local usernames without unlocking vaults.
+
+**Bash:**
+
+```sh
+mkdir -p ~/.local/share/bash-completion/completions
+secrets completion bash > ~/.local/share/bash-completion/completions/secrets
+```
+
+Create the destination directory if needed. Bash completion needs to be enabled in your shell; start a new shell after installing the script.
+
+**Zsh:**
+
+```sh
+mkdir -p ~/.zsh/completions
+secrets completion zsh > ~/.zsh/completions/_secrets
+```
+
+Add the directory to `fpath` before initializing completion in `~/.zshrc`:
+
+```sh
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit
+compinit
+```
+
+Then start a new shell. Secret IDs are not completed because looking them up would require decrypting a vault.
+
 ## Development
 
 ```sh

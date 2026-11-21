@@ -85,7 +85,7 @@ By default, the CLI stores vault aliases in `~/.config/secrets/config.json` and 
 
 Vault files can be backed up or synchronized using your preferred tools. Back up the user directory as well: without the users' encrypted identities and their passwords, encrypted vaults may become inaccessible.
 
-Run `secrets --help` for the full command and option reference.
+Run `secrets --help` for the full command and option reference. Check the installed version with `secrets --version`. Release builds use the Git tag; development builds show a commit identifier (and `-dirty` for uncommitted changes).
 
 ## Legacy vaults
 
@@ -133,3 +133,6 @@ make install
 ```
 
 `make install` builds the `secrets` executable into the Go binary directory. Use `INSTALL_DIR=/custom/bin` to change the installation directory.
+
+Bump `VERSION` in `secrets.go`, commit the change, then run `make release`. The release script creates the GitHub tag automatically and fails if the tag already exists. Set `GITHUB_RELEASE_TOKEN` to a token with repository Contents write permission.
+

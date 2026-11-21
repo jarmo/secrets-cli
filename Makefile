@@ -1,7 +1,12 @@
 BINARY = secrets
 INSTALL_DIR ?= $(or $(shell go env GOBIN),$(shell go env GOPATH)/bin)
 GOARCH = amd64
-GO_BUILD = GOARCH=${GOARCH} go build -mod=vendor
+RELEASE_VERSION = v$(shell sed -n 's/^const VERSION = "\([^" ]*\)"/\1/p' secrets.go)
+GIT_COMMIT = $(shell git rev-parse --short HEAD 2>/dev/null)
+GIT_DIRTY = $(shell git diff --quiet 2>/dev/null && git diff --cached --quiet 2>/dev/null || echo -dirty)
+GIT_TAG = $(shell git describe --tags --exact-match HEAD 2>/dev/null)
+BUILD_VERSION ?= $(if $(filter $(RELEASE_VERSION),$(GIT_TAG)),$(RELEASE_VERSION)$(GIT_DIRTY),$(RELEASE_VERSION)$(if $(GIT_COMMIT),-g$(GIT_COMMIT),-development)$(GIT_DIRTY))
+GO_BUILD = GOARCH=${GOARCH} go build -mod=vendor -ldflags="-X main.version=$(BUILD_VERSION)"
 
 all: test clean linux freebsd openbsd darwin windows
 
@@ -32,9 +37,10 @@ test: vendor
 
 install: vendor
 	install -d "$(INSTALL_DIR)"
-	go build -mod=vendor -o "$(INSTALL_DIR)/$(BINARY)" .
+	go build -mod=vendor -ldflags="-X main.version=$(BUILD_VERSION)" -o "$(INSTALL_DIR)/$(BINARY)" .
 
-release: all
+release:
+	$(MAKE) all BUILD_VERSION=$(RELEASE_VERSION)
 	script/release.sh
 
 .PHONY: all clean vendor linux freebsd openbsd darwin windows test install release

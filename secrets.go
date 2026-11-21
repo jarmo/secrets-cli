@@ -7,7 +7,9 @@ import (
 
 const VERSION = "6.1.2"
 
+var version = "v" + VERSION
+
 func main() {
-  cli.Command(VERSION, os.Args[1:]).Execute()
+  cli.Command("secrets " + version, os.Args[1:]).Execute()
 }
 

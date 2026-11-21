@@ -22,6 +22,8 @@ func createUsage() string {
   return `secrets COMMAND [OPTIONS]
 
 Usage:
+  secrets (-h | --help)
+  secrets (-v | --version)
   secrets list [FILTER] [--user=USERNAME] [--users-dir=USERS_DIR] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets add NAME [--user=USERNAME] [--users-dir=USERS_DIR] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets edit ID [--user=USERNAME] [--users-dir=USERS_DIR] [--alias=VAULT_ALIAS | --path=VAULT_PATH]

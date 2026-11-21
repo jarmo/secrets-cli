@@ -2,7 +2,9 @@ package command
 
 import (
 	"fmt"
+	"io"
 	"os"
+	"sort"
 
 	"github.com/jarmo/secrets-cli/v6/cli/vaultfile"
 	"github.com/jarmo/secrets-cli/v6/input"
@@ -36,11 +38,16 @@ func (command UserList) Execute() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+	printUsers(os.Stdout, users)
+}
+
+func printUsers(output io.Writer, users []crypto.VaultUser) {
+	sort.Slice(users, func(i, j int) bool { return users[i].Name < users[j].Name })
 	for _, user := range users {
 		if user.PasswordBased {
-			fmt.Printf("%s (vault password)\n", user.Name)
+			fmt.Fprintf(output, "%s (vault password)\n", user.Name)
 		} else {
-			fmt.Println(user.Name)
+			fmt.Fprintln(output, user.Name)
 		}
 	}
 }

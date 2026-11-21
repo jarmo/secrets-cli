@@ -3,6 +3,7 @@ package command
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/jarmo/secrets/user"
@@ -20,13 +21,21 @@ func TestActivateUser(t *testing.T) {
 	if _, err := user.Load(directory, "bob"); !os.IsNotExist(err) {
 		t.Fatalf("Mismatched passwords created an account: %v", err)
 	}
-	if err := activateUser(directory, "bob", "incorrect", []byte("correct"), []byte("correct")); err == nil {
+	if err := activateUser(directory, "bob", "incorrect", []byte("correct-password"), []byte("correct-password")); err == nil {
 		t.Fatal("Accepted incorrect setup code")
 	}
-	if err := activateUser(directory, "bob", code, []byte("correct"), []byte("correct")); err != nil {
+	for _, candidate := range []string{"short", strings.Repeat("x", 1025)} {
+		if err := activateUser(directory, "bob", code, []byte(candidate), []byte(candidate)); err == nil {
+			t.Fatal("Accepted invalid password length")
+		}
+		if _, err := user.Load(directory, "bob"); !os.IsNotExist(err) {
+			t.Fatalf("Invalid password created an account: %v", err)
+		}
+	}
+	if err := activateUser(directory, "bob", code, []byte("correct-password"), []byte("correct-password")); err != nil {
 		t.Fatal(err)
 	}
-	if _, _, err := user.Authenticate(directory, "bob", []byte("correct")); err != nil {
+	if _, _, err := user.Authenticate(directory, "bob", []byte("correct-password")); err != nil {
 		t.Fatal(err)
 	}
 	if err := activateUser(directory, "bob", code, []byte("second"), []byte("second")); err == nil {

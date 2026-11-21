@@ -44,8 +44,8 @@ func (command UserPasswordChange) run() error {
 }
 
 func changeUserPassword(directory, username string, currentPassword, newPassword, confirmation []byte) error {
-	if len(newPassword) < 12 || len(newPassword) > 1024 {
-		return errors.New("Password must be between 12 and 1024 bytes")
+	if err := user.ValidatePassword(newPassword); err != nil {
+		return err
 	}
 	if !bytes.Equal(newPassword, confirmation) {
 		return errors.New("Passwords do not match")

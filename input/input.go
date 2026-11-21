@@ -6,7 +6,7 @@ import (
   "strings"
   "bufio"
   "syscall"
-  "golang.org/x/crypto/ssh/terminal"
+  "golang.org/x/term"
 )
 
 func Ask(message string) string {
@@ -39,7 +39,7 @@ func AskMultiline(message string) string {
 
 func AskPassword(message string) []byte {
   fmt.Print(message)
-  password, err := terminal.ReadPassword(int(syscall.Stdin))
+  password, err := term.ReadPassword(int(syscall.Stdin))
   if err != nil {
     panic(err)
   }

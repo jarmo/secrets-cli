@@ -27,7 +27,7 @@ func (command Delete) Execute() {
       fmt.Fprintln(os.Stderr, err)
       os.Exit(1)
     }
-    fmt.Println("Deleted:", deletedSecret)
+    fmt.Printf("Deleted: %s (%s)\n", deletedSecret.Name, deletedSecret.Id)
   }
 }
 

@@ -25,6 +25,6 @@ func (command Add) Execute() {
     fmt.Fprintln(os.Stderr, err)
     os.Exit(1)
   }
-  fmt.Println("Added:", newSecret)
+  fmt.Printf("Added: %s (%s)\n", newSecret.Name, newSecret.Id)
 }
 

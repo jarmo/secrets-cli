@@ -30,7 +30,7 @@ func (command Edit) Execute() {
       fmt.Fprintln(os.Stderr, err)
       os.Exit(1)
     }
-    fmt.Println("Edited:", editedSecret)
+    fmt.Printf("Edited: %s (%s)\n", editedSecret.Name, editedSecret.Id)
   }
 }
 

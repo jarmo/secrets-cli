@@ -12,7 +12,13 @@ import (
 func Ask(message string) string {
   fmt.Print(message)
   scanner := bufio.NewScanner(os.Stdin)
-  scanner.Scan()
+  scanner.Buffer(make([]byte, 4096), 4096)
+  if !scanner.Scan() {
+    if err := scanner.Err(); err != nil {
+      panic(fmt.Errorf("Unable to read input: %w", err))
+    }
+    return ""
+  }
   return scanner.Text()
 }
 
@@ -20,10 +26,14 @@ func AskMultiline(message string) string {
   fmt.Print(message)
   var value []string
   scanner := bufio.NewScanner(os.Stdin)
+  scanner.Buffer(make([]byte, 4096), 8<<20)
   for scanner.Scan() {
       value = append(value, scanner.Text())
   }
 
+  if err := scanner.Err(); err != nil {
+    panic(fmt.Errorf("Unable to read secret value: %w", err))
+  }
   return replaceUnprintableCharacters(strings.Join(value, "\n"))
 }
 

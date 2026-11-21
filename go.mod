@@ -1,10 +1,10 @@
-module github.com/jarmo/secrets-cli/v6
+module github.com/jarmo/secrets-cli/v7
 
 go 1.27
 
 require (
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
-	github.com/jarmo/secrets v0.0.0-20230408145532-dd802b1db650
+	github.com/jarmo/secrets v0.0.0-20261121160521-f059eaebecaa
 	github.com/pinzolo/xdgdir v1.0.0
 	github.com/satori/go.uuid v1.2.0
 	golang.org/x/term v0.48.0
@@ -16,5 +16,3 @@ require (
 	golang.org/x/crypto v0.59.0 // indirect
 	golang.org/x/sys v0.50.0 // indirect
 )
-
-replace github.com/jarmo/secrets => ../secrets

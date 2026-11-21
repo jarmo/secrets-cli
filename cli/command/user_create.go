@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jarmo/secrets-cli/v6/storage/path"
+	"github.com/jarmo/secrets-cli/v7/storage/path"
 	"github.com/jarmo/secrets/user"
 )
 

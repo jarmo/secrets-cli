@@ -4,8 +4,8 @@ import (
   "fmt"
   "os"
   "github.com/jarmo/secrets/vault"
-  "github.com/jarmo/secrets-cli/v6/cli/vaultfile"
-  "github.com/jarmo/secrets-cli/v6/input"
+  "github.com/jarmo/secrets-cli/v7/cli/vaultfile"
+  "github.com/jarmo/secrets-cli/v7/input"
 )
 
 type Add struct {

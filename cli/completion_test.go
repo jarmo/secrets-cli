@@ -3,7 +3,7 @@ package cli
 import (
 	"testing"
 
-	"github.com/jarmo/secrets-cli/v6/cli/command"
+	"github.com/jarmo/secrets-cli/v7/cli/command"
 )
 
 func TestCommandCompletion(t *testing.T) {

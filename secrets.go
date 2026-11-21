@@ -2,10 +2,10 @@ package main
 
 import (
   "os"
-  "github.com/jarmo/secrets-cli/v6/cli"
+  "github.com/jarmo/secrets-cli/v7/cli"
 )
 
-const VERSION = "6.1.2"
+const VERSION = "7.0.0"
 
 var version = "v" + VERSION
 

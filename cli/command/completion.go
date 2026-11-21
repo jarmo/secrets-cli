@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jarmo/secrets-cli/v6/completion"
+	"github.com/jarmo/secrets-cli/v7/completion"
 )
 
 type Completion struct {

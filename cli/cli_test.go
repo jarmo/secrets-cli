@@ -303,46 +303,11 @@ func TestExecute_DeleteWithVaultAlias(t *testing.T) {
   }
 }
 
-func TestExecute_ChangePassword(t *testing.T) {
-  switch parsedCommand := Command(version, []string{"change-password"}).(type) {
-    case command.ChangePassword:
-      if parsedCommand.VaultAlias != "" {
-        t.Fatalf("Expected VaultAlias to be empty but was: '%v'", parsedCommand.VaultAlias)
-      }
-      if parsedCommand.VaultPath != "" {
-        t.Fatalf("Expected VaultPath to be empty but was: '%v'", parsedCommand.VaultPath)
-      }
-    default:
-      t.Fatalf("Got unexpected command: %T", parsedCommand)
-  }
-}
-
-func TestExecute_ChangePasswordWithCustomVaultPath(t *testing.T) {
-  vaultPath := "/foo/bar/baz"
-
-  switch parsedCommand := Command(version, []string{"change-password", "--path", vaultPath}).(type) {
-    case command.ChangePassword:
-      if parsedCommand.VaultAlias != "" {
-        t.Fatalf("Expected VaultAlias to be empty but was: '%v'", parsedCommand.VaultAlias)
-      }
-      if parsedCommand.VaultPath != vaultPath {
-        t.Fatalf("Expected VaultPath to be '%v' but was: '%v'", vaultPath, parsedCommand.VaultPath)
-      }
-    default:
-      t.Fatalf("Got unexpected command: %T", parsedCommand)
-  }
-}
-
-func TestExecute_ChangePasswordWithVaultAlias(t *testing.T) {
-  vaultAlias := "foo-bar"
-
-  switch parsedCommand := Command(version, []string{"change-password", "--alias", vaultAlias}).(type) {
-    case command.ChangePassword:
-      if parsedCommand.VaultAlias != vaultAlias {
-        t.Fatalf("Expected VaultAlias to be '%v' but was: '%v'", vaultAlias, parsedCommand.VaultAlias)
-      }
-      if parsedCommand.VaultPath != "" {
-        t.Fatalf("Expected VaultPath to be empty but was: '%v'", parsedCommand.VaultPath)
+func TestExecute_UserPasswordChange(t *testing.T) {
+  switch parsedCommand := Command(version, []string{"user-password-change", "alice", "--users-dir", "/tmp/users"}).(type) {
+    case command.UserPasswordChange:
+      if parsedCommand.Username != "alice" || parsedCommand.UsersDirectory != "/tmp/users" {
+        t.Fatalf("Expected user password change command, got: %+v", parsedCommand)
       }
     default:
       t.Fatalf("Got unexpected command: %T", parsedCommand)

@@ -22,7 +22,7 @@ Usage:
   secrets add NAME [--user=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets edit ID [--user=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets delete ID [--user=USERNAME] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets change-password [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets user-password-change USER [--users-dir=USERS_DIR]
   secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS --user=USERNAME [--users-dir=USERS_DIR]
   secrets user-create USER [--users-dir=USERS_DIR]
   secrets user-activate USER [--users-dir=USERS_DIR]
@@ -138,6 +138,18 @@ User bob activated!
 ```
 
 Setup codes expire after 48 hours. Both commands accept `--users-dir` to use the same user directory.
+
+To change a user password without changing access to any vault:
+
+```
+$ secrets user-password-change bob
+Enter current user password: [current password]
+Enter new user password: [new password]
+Enter new user password again: [new password]
+User password successfully changed!
+```
+
+The same command supports `--users-dir`.
 
 Once activated, a user can be granted access to a vault:
 

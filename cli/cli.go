@@ -19,7 +19,7 @@ Usage:
   secrets add NAME [--user=USERNAME] [--users-dir=USERS_DIR] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets edit ID [--user=USERNAME] [--users-dir=USERS_DIR] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
   secrets delete ID [--user=USERNAME] [--users-dir=USERS_DIR] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
-  secrets change-password [--alias=VAULT_PATH | --path=VAULT_PATH]
+  secrets user-password-change USER [--users-dir=USERS_DIR]
   secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS --user=USERNAME [--users-dir=USERS_DIR]
   secrets user-create USER [--users-dir=USERS_DIR]
   secrets user-activate USER [--users-dir=USERS_DIR]
@@ -57,8 +57,8 @@ func createCommand(arguments map[string]interface {}) command.Executable {
   } else if arguments["delete"].(bool) {
     id, _ := uuid.FromString(arguments["ID"].(string))
     return command.Delete{Id: id, VaultAlias: vaultAlias, VaultPath: vaultPath, User: authenticatedUser, UsersDirectory: usersDirectory}
-  } else if arguments["change-password"].(bool) {
-    return command.ChangePassword{VaultAlias: vaultAlias, VaultPath: vaultPath}
+  } else if arguments["user-password-change"].(bool) {
+    return command.UserPasswordChange{Username: arguments["USER"].(string), UsersDirectory: usersDirectory}
   } else if arguments["user-create"].(bool) {
     directory, _ := arguments["--users-dir"].(string)
     return command.UserCreate{Username: arguments["USER"].(string), UsersDirectory: directory}

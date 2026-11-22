@@ -81,7 +81,18 @@ The acting user must be able to access the configured vaults. All vaults involvi
 
 `--alias` selects a configured vault; `--path` selects a vault file directly. Each vault has its own set of authorized users.
 
-By default, the CLI stores vault aliases in `~/.config/secrets/config.json` and users in `~/.config/secrets/users`, respecting `XDG_CONFIG_HOME`. Use `--users-dir` to override the user directory for commands that access accounts.
+By default, the CLI stores vault aliases in `~/.config/secrets/config.json` and users in `~/.config/secrets/users`, respecting `XDG_CONFIG_HOME`. To keep user accounts somewhere else (for example, in a synchronized Dropbox folder), set one global `UsersDir` in `config.json`:
+
+```json
+{
+  "UsersDir": "/home/alice/Dropbox/secrets/users",
+  "Vaults": [
+    {"Path": "/home/alice/Dropbox/secrets/production.json", "Alias": "production"}
+  ]
+}
+```
+
+Use an absolute `UsersDir` path. The old JSON array of vault aliases remains supported and uses the default account directory. The CLI upgrades that format on its next configuration write; it does not rewrite configuration files merely to read them. The `--users-dir` flag overrides the configured directory for an individual command. Changing `UsersDir` does not move existing account files: copy or sync `users/` to the chosen location before using it. Update web to a version that understands the new format before changing a shared configuration file.
 
 Vault files can be backed up or synchronized using your preferred tools. Back up the user directory as well: without the users' encrypted identities and their passwords, encrypted vaults may become inaccessible.
 

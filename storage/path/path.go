@@ -30,6 +30,13 @@ func configurationPath() string {
 }
 
 func UsersDirectory() string {
+  directory, err := path.UsersDirectory(configurationPath())
+  if err != nil {
+    panic(err)
+  }
+  if directory != "" {
+    return directory
+  }
   return user.DefaultDirectory(filepath.Dir(configurationPath()))
 }
 

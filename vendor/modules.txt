@@ -1,7 +1,7 @@
 # github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
 ## explicit
 github.com/docopt/docopt-go
-# github.com/jarmo/secrets v0.0.0-20261121160521-f059eaebecaa
+# github.com/jarmo/secrets v0.0.0-20261122134747-80078d479eb5
 ## explicit; go 1.27
 github.com/jarmo/secrets/crypto
 github.com/jarmo/secrets/secret

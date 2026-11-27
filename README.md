@@ -26,7 +26,7 @@ Now create a vault for Alice:
 secrets initialize --path /path/to/production.json --alias production --user alice
 ```
 
-`initialize` creates an encrypted vault immediately. Alice's user password unlocks her identity, which grants access to the vault; there is no separate vault password.
+`initialize` creates an encrypted vault using Alice's public key without asking for her password. An administrator can create the vault on her behalf without receiving access to it. Alice must have activated her account first. Only her account can unlock the new vault; there is no separate vault password.
 
 Add and list secrets:
 

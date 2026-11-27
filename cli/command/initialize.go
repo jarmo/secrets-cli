@@ -5,7 +5,6 @@ import (
   "os"
   "github.com/jarmo/secrets/user"
   "github.com/jarmo/secrets/storage"
-  "github.com/jarmo/secrets-cli/v7/input"
   "github.com/jarmo/secrets-cli/v7/storage/path"
 )
 
@@ -21,13 +20,7 @@ func (command Initialize) Execute() {
   if directory == "" {
     directory = path.UsersDirectory()
   }
-  password := input.AskPassword("Enter user password: ")
-  defer func() {
-    for index := range password {
-      password[index] = 0
-    }
-  }()
-  if err := initializeVault(command.VaultPath, directory, command.User, password); err != nil {
+  if err := initializeVault(command.VaultPath, directory, command.User); err != nil {
     fmt.Fprintln(os.Stderr, err)
     os.Exit(1)
   }
@@ -35,8 +28,8 @@ func (command Initialize) Execute() {
   fmt.Println(fmt.Sprintf("Vault successfully created and configured at %s!", configurationPath))
 }
 
-func initializeVault(vaultPath, usersDirectory, username string, password []byte) error {
-  record, _, err := user.Authenticate(usersDirectory, username, password)
+func initializeVault(vaultPath, usersDirectory, username string) error {
+  record, err := user.Load(usersDirectory, username)
   if err != nil {
     return err
   }

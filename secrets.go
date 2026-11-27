@@ -5,7 +5,7 @@ import (
   "github.com/jarmo/secrets-cli/v7/cli"
 )
 
-const VERSION = "7.0.1"
+const VERSION = "7.1.0"
 
 var version = "v" + VERSION
 

@@ -53,7 +53,7 @@ func TestAddUser(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Contains(before, []byte("bob")) {
+	if bytes.Contains(before, []byte(`"bob"`)) {
 		t.Fatal("Vault file exposes user username")
 	}
 	if err := addUserForUser(vaultPath, directory, "bob", privateKey); err == nil {

@@ -1,8 +1,8 @@
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815 h1:bWDMxwH3px2JBh6AyO7hdCn/PkvCZXii8TGj7sbtEbQ=
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
-github.com/jarmo/secrets v0.0.0-20261122134747-80078d479eb5 h1:0wtm+QaeA3Zh5wz7uabLFkc1ZQAohOg3VD1YrVcFhNM=
-github.com/jarmo/secrets v0.0.0-20261122134747-80078d479eb5/go.mod h1:9BC6+MNdf972Eu/mvEHoGn1V7jus+hm6SyEiMOlcy0I=
+github.com/jarmo/secrets v0.0.0-20261128112833-1b02f8fc4fdc h1:zwakRjUybDBrp5Tm8UpFUZat8BkSwYgzLoj5XAyBqt4=
+github.com/jarmo/secrets v0.0.0-20261128112833-1b02f8fc4fdc/go.mod h1:9BC6+MNdf972Eu/mvEHoGn1V7jus+hm6SyEiMOlcy0I=
 github.com/juju/fslock v0.0.0-20160525022230-4d5c94c67b4b h1:FQ7+9fxhyp82ks9vAuyPzG0/vVbWwMwLJ+P6yJI5FN8=
 github.com/juju/fslock v0.0.0-20160525022230-4d5c94c67b4b/go.mod h1:HMcgvsgd0Fjj4XXDkbjdmlbI505rUPBs6WBMYg2pXks=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
